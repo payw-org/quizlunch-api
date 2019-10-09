@@ -7,6 +7,7 @@
     "start": "node bin/www",
     "test": "echo \"Error: no test specified\" && exit 1",
     "build": "node_modules/.bin/webpack webpack.config.js",
+    "start-hcj":"node build/bundle.js",
     "clean": "rm -rf build"
   },
   "keywords": [],
