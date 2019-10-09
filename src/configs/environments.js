@@ -1,25 +1,12 @@
 const environments = {
     development: {
-      mysql: {
-        username: 'root',
-        password: 'PASSWORD',
-        database: 'my_db'
-      }
-    },
-  
-    test: {
-      mysql: {
-        username: 'root',
-        password: 'PASSWORD',
-        database: 'my_db'
-      }
-    },
-  
-    production: {
-  
+      host: 'localhost',
+      user: 'root',
+      password: 'PASSWORD',
+      database: 'my_db'
     }
   }
 
-  const nodeEnv = process.env.NODE_ENV || 'development';
+const nodeEnv = 'development';
 
 module.exports = environments[nodeEnv];
