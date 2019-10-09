@@ -1,9 +1,13 @@
 var path = require('path')
 
 module.exports = {
-    entry: './src/app/main.js',
+    target: "node",
+    entry: {
+        app:['./src/app/main.js']
+    },
     output: {
         filename: 'bundle.js',
         path: path.resolve(__dirname, 'build')
-    }
+    },
+    externals: [nodeExternals()]
 };
