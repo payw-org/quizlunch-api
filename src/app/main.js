@@ -7,5 +7,3 @@ connection.connect((err)=>{
     console.log(err)
 })
 
-
-// connection.query()
