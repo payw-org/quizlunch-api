@@ -1,20 +1,21 @@
 
-// import bodyParser from 'body-parser'
-// import express, { Express } from 'express'
-// import router from 'Routes/api'
 const express = require("express");
+const bodyParser = require('body-parser');
+const helmet = require('helmet');
+const cors = require('cors');
+
 
 
 class RouteServiceProvider {
   
 
-    // basicMiddleware = [
-    //     helmet(),
-    //     cors(),
-    //     bodyParser.json(),
-    //     bodyParser.urlencoded({ extended: true })
+    basicMiddleware = [
+        helmet(),
+        cors(),
+        bodyParser.json(),
+        bodyParser.urlencoded({ extended: true })
         
-    //   ]
+    ]
 
 
     constructor() {
@@ -25,7 +26,7 @@ class RouteServiceProvider {
 
 
   boot(){
-
+    this.app.use(this.basicMiddleware)
     this.app.use("/",require("../http/routes/api"))
     return this.app
   }
