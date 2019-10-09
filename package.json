@@ -4,7 +4,7 @@
   "description": "",
   "main": "index.js",
   "scripts": {
-    "start": "node bin/www",
+    "start": "node src/app/main",
     "test": "echo \"Error: no test specified\" && exit 1",
     "build": "node_modules/.bin/webpack webpack.config.js",
     "clean": "rm -rf build"
@@ -13,8 +13,10 @@
   "author": "",
   "license": "ISC",
   "dependencies": {
-    "ejs": "^2.7.1",
+    "helmet": "^3.20.0",
+    "body-parser": "^1.19.0",
     "express": "^4.17.1",
+    "cors": "^2.8.5",
     "mysql": "^2.17.1"
   },
   "devDependencies": {
