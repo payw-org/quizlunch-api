@@ -20,6 +20,6 @@ const environments = {
     }
   }
 
-  const nodeEnv = process.env.NODE_ENV || 'development';
+  const nodeEnv = 'development';
 
 module.exports = environments[nodeEnv];
