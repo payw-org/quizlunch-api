@@ -1,22 +1,9 @@
 const environments = {
     development: {
-      mysql: {
-        username: 'root',
-        password: 'PASSWORD',
-        database: 'my_db'
-      }
-    },
-  
-    test: {
-      mysql: {
-        username: 'root',
-        password: 'PASSWORD',
-        database: 'my_db'
-      }
-    },
-  
-    production: {
-  
+      host: 'localhost',
+      user: 'root',
+      password: 'PASSWORD',
+      database: 'my_db'
     }
   }
 
