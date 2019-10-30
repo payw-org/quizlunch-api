@@ -3,9 +3,9 @@ const config = require('../configs/environments');
 
 var connection = mysql.createConnection({
   host     : 'localhost',
-  user     : config.mysql.username,
-  password : config.mysql.password,
-  database : config.mysql.database
+  user     : config.user,
+  password : config.password,
+  database : config.database
 });
 exports.connect = function(callback){
     connection.connect(function(err) {
