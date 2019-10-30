@@ -48,23 +48,34 @@ exports.create = (req, res) => {
 exports.delete = (req, res) => {
 
       connection.query("SELECT password from Comments where commentID='"+req.body.commentID+"'", function(err,  rows, fields) {
-        if (!err)
+      if (!err)
       {
+        var pwd=rows[0].password
         console.log('Select password', rows);
+
+        if(pwd==req.body.password)
+        {
+          connection.query("DELETE FROM Comments WHERE commentID ='"+req.body.commentID+"'", function(err,  rows, fields) {
+            if (!err)
+            {
+                console.log('delete Comments');
+                res.send(200,'suecess deleting');
+            }
+            else
+                console.log('Error while delete comments performing Query.', err);
+            });
+        }
+        else 
+        {
+          res.send(200,'wrong password');
+        }
       }
       else
         console.log('Error while performing Select comments password Query.', err);
     });
 
+
     
 
-    connection.query("DELETE FROM Comments WHERE commentID ='"+req.body.commentID+"'", function(err,  rows, fields) {
-    if (!err)
-    {
-        console.log('delete Comments', rows);
-        res.send(200,'success');
-    }
-    else
-        console.log('Error while delete comments performing Query.', err);
-    });
+    
   };
