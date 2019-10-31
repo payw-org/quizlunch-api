@@ -2,7 +2,7 @@ require('dotenv').config()
 const express = require('express');
 const app = express();
 const bodyParser = require('body-parser')
-const port = 6666;
+const port = 3200;
 
 const DB = require('./db/DBConnector');
 
