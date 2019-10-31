@@ -1,9 +1,11 @@
+
+
 const environments = {
     development: {
-      host: 'localhost',
-      user: 'root',
-      password: 'PASSWORD',
-      database: 'my_db'
+      host: process.env.MYSQL.host,
+      user: process.env.MYSQL.user,
+      password: process.env.MYSQL.password,
+      database: process.env.MYSQL.password
     }
   }
 
