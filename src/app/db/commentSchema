@@ -6,4 +6,5 @@ create table comments(
     text char(80),
     ip char(20),
     time char(20)
+    FOREIGN KEY (quizID) REFERENCES quizs (quizID)
     );
