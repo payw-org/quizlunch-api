@@ -1,0 +1,10 @@
+create table comments(
+    commentID int not null AUTO_INCREMENT PRIMARY KEY,
+    quizID int not null,
+    nickname char(20),
+    password char(20),
+    text char(80),
+    ip char(20),
+    time char(20)
+    FOREIGN KEY (quizID) REFERENCES quizs (quizID)
+    );
