@@ -4,8 +4,6 @@ const app = express();
 const bodyParser = require('body-parser')
 const port = 3200;
 
-const DB = require('./db/DBConnector');
-
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: true }));
 
@@ -15,13 +13,17 @@ app.use('/winner',require('./routes/winner'))
 
 app.use('/comment',require('./routes/comment'))
 
+;(async ()=>{
+  const DBConnector = require('./db/DBConnector')
+  const conn = await DBConnector.getConnection()
+  const [ result ] = await conn.query('SELECT * FROM comments')
+  console.log(result)
+})()
 
 
-DB.connect(() => {
-  app.listen(port, () => {
-    console.log('Example app listening on port ' + port);
-  })
+
+app.listen(port, () => {
+  console.log('Example app listening on port ' + port);
 })
-
 
   
