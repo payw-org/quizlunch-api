@@ -5,17 +5,8 @@ const DBConnector = require('../db/DBConnector');
 exports.getOneQuizComments = async (req, res) => {
   const connection = await DBConnector.getConnection()
 
-  connection.query("SELECT * from Comments where quizID='"+req.body.quizID+"'", function(err,  rows, fields) {
-         if (!err)
-        {
-          console.log('Select comments', rows);
-          res.json(rows)
-        }
-        else
-          console.log('Error while performing Select comments Query.', err);
-      });
-
-
+  const [result] = connection.query("SELECT * from Comments where quizID='"+req.body.quizID+"'")
+  res.send(result)
 };
 
   
