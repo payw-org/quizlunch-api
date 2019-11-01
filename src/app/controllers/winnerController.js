@@ -1,7 +1,7 @@
 const DBConnector = require('../db/DBConnector');
 
 
-  exports.create = (req, res) => {
+  exports.create = async (req, res) => {
     
 
     const connection = await DBConnector.getConnection()
