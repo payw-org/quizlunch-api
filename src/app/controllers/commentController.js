@@ -37,7 +37,7 @@ exports.delete = async (req, res) => {
 
       const connection = await DBConnector.getConnection()
 
-      const [result] = await connection.query("DELETE FROM comments WHERE commentID=(SELECT commentID from comments where commentID='"+req.body.commentID+"' and password='"+req.body.password+"')", function(err,  rows, fields) {
+      const [result] = await connection.query("DELETE FROM comments WHERE commentID in (SELECT commentID from comments where commentID='"+req.body.commentID+"' and password='"+req.body.password+"')", function(err,  rows, fields) {
       if (!err)
       {
         res.send(result)
