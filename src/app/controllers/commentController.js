@@ -10,7 +10,7 @@ exports.getOneQuizComments = async (req, res) => {
 };
 
   
-exports.create = (req, res) => {
+exports.create = async (req, res) => {
     const connection = await DBConnector.getConnection()
     var today = new Date();
     var date = today.getFullYear()+'-'+(today.getMonth()+1)+'-'+today.getDate();
@@ -27,7 +27,7 @@ exports.create = (req, res) => {
                 'time':dateTime 
             };
  
-    const [result] = connection.query("insert into Comments (quizID ,nickname, password, text, ip ,time ) VALUES ('"+ comment.quizID + "', '" + comment.nickname + "', '" + comment.password+ "', '" + comment.text+ "', '" + comment.ip+ "', '" + comment.time+ "') ")
+    const [result] = await connection.query("insert into Comments (quizID ,nickname, password, text, ip ,time ) VALUES ('"+ comment.quizID + "', '" + comment.nickname + "', '" + comment.password+ "', '" + comment.text+ "', '" + comment.ip+ "', '" + comment.time+ "') ")
 
     res.send(result)
 };
