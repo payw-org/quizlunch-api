@@ -37,32 +37,18 @@ exports.delete = async (req, res) => {
 
   const connection = await DBConnector.getConnection()
 
-   await connection.query("SELECT password from comments where commentID='"+req.body.commentID+"'", function(err,  rows, fields) {
-    if (!err)
+    const [result1] =  await connection.query("SELECT password from comments where commentID='"+req.body.commentID+"'")
+  
+    if(result1==req.body.password)
     {
-      var pwd=rows[0].password
-      console.log('Select password', rows);
-
-      if(pwd==req.body.password)
-      {
-          connection.query("DELETE FROM comments WHERE commentID ='"+req.body.commentID+"'", function(err,  rows, fields) {
-          if (!err)
-          {
-              console.log('delete comments');
-              res.send(200,'suecess deleting');
-          }
-          else
-              console.log('Error while delete comments performing Query.', err);
-          });
-      }
-      else 
-      {
-        res.send(200,'wrong password');
-      }
+      const [result2] =  await connection.query("DELETE FROM comments WHERE commentID ='"+req.body.commentID+"'")
+      res.send(200,'delete');
     }
-    else
-      console.log('Error while performing Select comments password Query.', err);
-  });
+    else 
+    {
+        res.send(200,'wrong password');
+    }
+  };
 
 
       
