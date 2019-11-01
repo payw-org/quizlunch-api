@@ -9,6 +9,6 @@ const environments = {
     }
   }
 
-  const nodeEnv = 'development';
+const nodeEnv = 'development';
 
 module.exports = environments[nodeEnv];
