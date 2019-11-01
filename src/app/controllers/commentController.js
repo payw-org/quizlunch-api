@@ -11,6 +11,7 @@ exports.getOneQuizComments = async (req, res) => {
 
   
 exports.create = (req, res) => {
+    const connection = await DBConnector.getConnection()
     var today = new Date();
     var date = today.getFullYear()+'-'+(today.getMonth()+1)+'-'+today.getDate();
     var time = today.getHours() + ":" + today.getMinutes() + ":" + today.getSeconds();
@@ -26,14 +27,9 @@ exports.create = (req, res) => {
                 'time':dateTime 
             };
  
-    connection.query("insert into Comments (quizID ,nickname, password, text, ip ,time ) VALUES ('"+ comment.quizID + "', '" + comment.nickname + "', '" + comment.password+ "', '" + comment.text+ "', '" + comment.ip+ "', '" + comment.time+ "') ", function(err,result){
-        if (err) {
-            console.error(err);
-            throw err;
-        }
-        res.send(200,'success');
-    });
+    const [result] = connection.query("insert into Comments (quizID ,nickname, password, text, ip ,time ) VALUES ('"+ comment.quizID + "', '" + comment.nickname + "', '" + comment.password+ "', '" + comment.text+ "', '" + comment.ip+ "', '" + comment.time+ "') ")
 
+    res.send(result)
 };
 
 
