@@ -1,5 +1,5 @@
-const connection = require('../db/DBConnector').getConnection();
-
+const DBConnector = require('../db/DBConnector');
+const connection = await DBConnector.getConnection()
   
   exports.get = (req, res) => {
     
