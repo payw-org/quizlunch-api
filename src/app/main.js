@@ -13,15 +13,6 @@ app.use('/winner',require('./routes/winner'))
 
 app.use('/comment',require('./routes/comment'))
 
-;(async ()=>{
-  const DBConnector = require('./db/DBConnector')
-  const conn = await DBConnector.getConnection()
-  const [ result ] = await conn.query('SELECT * FROM comments')
-  console.log(result)
-})()
-
-
-
 app.listen(port, () => {
   console.log('Example app listening on port ' + port);
 })
