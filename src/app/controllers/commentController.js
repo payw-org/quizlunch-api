@@ -5,7 +5,7 @@ const DBConnector = require('../db/DBConnector');
 exports.getOneQuizComments = async (req, res) => {
   const connection = await DBConnector.getConnection()
 
-  const [result] = await connection.query("SELECT * from comments")
+  const [result] = await connection.query("SELECT * from comments where quizID='"+req.body.quizID+"'")
   res.send(result)
 };
 
@@ -33,37 +33,35 @@ exports.create = async (req, res) => {
 };
 
 
-exports.delete = (req, res) => {
+exports.delete = async (req, res) => {
 
-      connection.query("SELECT password from comments where commentID='"+req.body.commentID+"'", function(err,  rows, fields) {
-      if (!err)
-      {
-        var pwd=rows[0].password
-        console.log('Select password', rows);
+  const connection = await DBConnector.getConnection()
 
-        if(pwd==req.body.password)
-        {
-          connection.query("DELETE FROM comments WHERE commentID ='"+req.body.commentID+"'", function(err,  rows, fields) {
-            if (!err)
-            {
-                console.log('delete comments');
-                res.send(200,'suecess deleting');
-            }
-            else
-                console.log('Error while delete comments performing Query.', err);
-            });
-        }
-        else 
-        {
-          res.send(200,'wrong password');
-        }
-      }
-      else
-        console.log('Error while performing Select comments password Query.', err);
-    });
+    const [result1] =  await connection.query("SELECT password from comments where commentID='"+req.body.commentID+"'")
+    if(result1[0].password==req.body.password)
+    {
+        const [result2] =  await connection.query("DELETE FROM comments WHERE commentID ='"+req.body.commentID+"'")
+        res.send(200,'delete');
+    }
+    else 
+    {
+        res.send(200,'wrong password');
+    }
+};
 
 
-    
+      
+
+    //   const [result] = await connection.query("DELETE FROM comments WHERE commentID in (SELECT commentID from comments where commentID='"+req.body.commentID+"' and password='"+req.body.password+"')", function(err,  rows, fields) {
+    //   if (!err)
+    //   {
+    //     res.send(result)
+    //   }
+    //   else
+    //     console.log('Error while performing Select comments password Query.', err);
+    // });
+
 
     
-  };
+
+  
