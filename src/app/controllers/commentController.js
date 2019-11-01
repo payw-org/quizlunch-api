@@ -2,7 +2,7 @@ const DBConnector = require('../db/DBConnector');
 
 
 
-exports.getOneQuizcomments = async (req, res) => {
+exports.getOneQuizComments = async (req, res) => {
   const connection = await DBConnector.getConnection()
 
   const [result] = await connection.query("SELECT * from comments")
