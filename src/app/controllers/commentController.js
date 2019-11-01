@@ -1,9 +1,10 @@
-const connection = require('../db/DBConnector').getConnection();
+const DBConnector = require('../db/DBConnector');
 
 
 
-exports.getOneQuizComments = (req, res) => {
-    
+exports.getOneQuizComments = async (req, res) => {
+  const connection = await DBConnector.getConnection()
+
   connection.query("SELECT * from Comments where quizID='"+req.body.quizID+"'", function(err,  rows, fields) {
          if (!err)
         {
