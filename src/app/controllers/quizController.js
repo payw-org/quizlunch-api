@@ -18,7 +18,7 @@ const DBConnector = require('../db/DBConnector');
   };
 
 
-  exports.create = (req, res) => {
+  exports.create = async (req, res) => {
     
     const connection = await DBConnector.getConnection()
 
@@ -51,7 +51,7 @@ const DBConnector = require('../db/DBConnector');
 
 
 
-  exports.correctCheck = (req, res) => {
+  exports.correctCheck = async (req, res) => {
     
     const connection = await DBConnector.getConnection()
 
@@ -74,7 +74,7 @@ const DBConnector = require('../db/DBConnector');
     });
   };
 
-  exports.updateGotAnswer = (req, res) => {
+  exports.updateGotAnswer = async (req, res) => {
 
     const connection = await DBConnector.getConnection()
     
