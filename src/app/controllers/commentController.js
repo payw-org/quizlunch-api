@@ -2,7 +2,7 @@ const DBConnector = require('../db/DBConnector');
 
 
 
-exports.getOneQuizComments = async (req, res) => {
+exports.getOneQuizcomments = async (req, res) => {
   const connection = await DBConnector.getConnection()
 
   const [result] = await connection.query("SELECT * from comments")
@@ -27,7 +27,7 @@ exports.create = async (req, res) => {
                 'time':dateTime 
             };
  
-    const [result] = await connection.query("insert into Comments (quizID ,nickname, password, text, ip ,time ) VALUES ('"+ comment.quizID + "', '" + comment.nickname + "', '" + comment.password+ "', '" + comment.text+ "', '" + comment.ip+ "', '" + comment.time+ "') ")
+    const [result] = await connection.query("insert into comments (quizID ,nickname, password, text, ip ,time ) VALUES ('"+ comment.quizID + "', '" + comment.nickname + "', '" + comment.password+ "', '" + comment.text+ "', '" + comment.ip+ "', '" + comment.time+ "') ")
 
     res.send(result)
 };
@@ -35,7 +35,7 @@ exports.create = async (req, res) => {
 
 exports.delete = (req, res) => {
 
-      connection.query("SELECT password from Comments where commentID='"+req.body.commentID+"'", function(err,  rows, fields) {
+      connection.query("SELECT password from comments where commentID='"+req.body.commentID+"'", function(err,  rows, fields) {
       if (!err)
       {
         var pwd=rows[0].password
@@ -43,10 +43,10 @@ exports.delete = (req, res) => {
 
         if(pwd==req.body.password)
         {
-          connection.query("DELETE FROM Comments WHERE commentID ='"+req.body.commentID+"'", function(err,  rows, fields) {
+          connection.query("DELETE FROM comments WHERE commentID ='"+req.body.commentID+"'", function(err,  rows, fields) {
             if (!err)
             {
-                console.log('delete Comments');
+                console.log('delete comments');
                 res.send(200,'suecess deleting');
             }
             else
