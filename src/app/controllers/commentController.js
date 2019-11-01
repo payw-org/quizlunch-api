@@ -48,7 +48,7 @@ exports.delete = async (req, res) => {
     {
         res.send(200,'wrong password');
     }
-  };
+};
 
 
       
@@ -65,5 +65,4 @@ exports.delete = async (req, res) => {
 
     
 
-    
-  };
+  
