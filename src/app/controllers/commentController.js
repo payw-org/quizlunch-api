@@ -1,4 +1,4 @@
-const connection = require('../db/DBConnector');
+const connection = require('../db/DBConnector').getConnection();
 
 
 
