@@ -1,8 +1,10 @@
-const connection = require('../db/DBConnector').getConnection();
+const DBConnector = require('../db/DBConnector');
 
 
   exports.create = (req, res) => {
     
+
+    const connection = await DBConnector.getConnection()
 
     var today = new Date();
     var date = today.getFullYear()+'-'+(today.getMonth()+1)+'-'+today.getDate();
@@ -18,12 +20,7 @@ const connection = require('../db/DBConnector').getConnection();
                 'time':dateTime 
             };
 
-    connection.query("insert into winners(quizID,nickname,text,ip,time) VALUES ('"+ winner.quizID + "', '" + winner.nickname + "','"+ winner.text + "', '" + winner.ip+ "', '" + winner.time + "') ", function(err,result){
-        if (err) {
-            console.error(err);
-            throw err;
-        }
-        res.send(200,'success');
-    });
-
+    const [result] = await connection.query("insert into winners(quizID,nickname,text,ip,time) VALUES ('"+ winner.quizID + "', '" + winner.nickname + "','"+ winner.text + "', '" + winner.ip+ "', '" + winner.time + "') ")
+    
+    res.send(result)
   };

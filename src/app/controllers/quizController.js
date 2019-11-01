@@ -3,16 +3,9 @@ const DBConnector = require('../db/DBConnector');
   exports.get = async (req, res)  => {
     
     const connection = await DBConnector.getConnection()
-    connection.query("SELECT * from quizs where quizID='"+req.body.quizID+"'", function(err,  rows, fields) {
-      if (!err)
-      {
-        console.log('Select quiz', rows);
-        res.json(rows)
-      }
-      else
-        console.log('Error while performing Select quiz Query.', err);
-    });
-
+    const [result] = await connection.query("SELECT * from quizs where quizID='"+req.body.quizID+"'")
+     
+    res.send(result)
 
 
   };
@@ -37,15 +30,9 @@ const DBConnector = require('../db/DBConnector');
                 'gotAnswer': 0
             };
 
-    connection.query("insert into quizs(title,picture,information,answer,time,gotAnswer) VALUES ('"+ quiz.title + "', '" + quiz.picture + "','"+ quiz.information + "', '" + quiz.answer+ "', '" + quiz.time +"', '" + quiz.gotAnswer + "') ", function(err,result){
-        if (err) {
-            console.error(err);
-            throw err;
-        }
-        res.send(200,'success');
-    });
+    const [result] = await connection.query("insert into quizs(title,picture,information,answer,time,gotAnswer) VALUES ('"+ quiz.title + "', '" + quiz.picture + "','"+ quiz.information + "', '" + quiz.answer+ "', '" + quiz.time +"', '" + quiz.gotAnswer + "') ")
 
-
+    res.send(result)
 
   };
 
@@ -55,36 +42,25 @@ const DBConnector = require('../db/DBConnector');
     
     const connection = await DBConnector.getConnection()
 
-    connection.query("SELECT answer from quizs where quizID='"+req.body.quizID+"'", function(err,  rows, fields) {
-      if (!err)
-      {
-        if(rows[0].answer==req.body.answer)
-        {
-            console.log('Correct Answer');
-            res.send("correct")
-        }
-        else
-        {
-            console.log('wrong answer');
-            res.send("wrong")
-        }
-      }
-      else
-        console.log('Error while performing Select quiz Query.', err);
-    });
+    const [result] = await connection.query("SELECT answer from quizs where quizID='"+req.body.quizID+"'")
+    if(result[0].answer==req.body.answer)
+    {
+        console.log('Correct Answer');
+        res.send("correct")
+    }
+    else
+    {
+        console.log('wrong answer');
+        res.send("wrong")
+    }
+    
   };
 
   exports.updateGotAnswer = async (req, res) => {
 
     const connection = await DBConnector.getConnection()
     
-    connection.query("UPDATE quizs set gotAnswer ='" +1+"'" +" where quizID='"+ req.body.quizID+"'", function(err,  rows, fields) {
-      if (!err)
-      {
-        console.log('update gotAnswer', rows);
-        res.send("update")
-      }
-      else
-        console.log('Error while performing Select quiz Query.', err);
-    });
+    const [result] = await connection.query("UPDATE quizs set gotAnswer ='" +1+"'" +" where quizID='"+ req.body.quizID+"'")
+    
+    res.send(result)
   };
