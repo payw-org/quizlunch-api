@@ -1,4 +1,4 @@
-const connection = require('../db/DBConnector').connector;
+const connection = require('../db/DBConnector');
 
   
   exports.get = (req, res) => {
