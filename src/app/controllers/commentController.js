@@ -39,10 +39,12 @@ exports.delete = async (req, res) => {
 
     const [result1] =  await connection.query("SELECT password from comments where commentID='"+req.body.commentID+"'")
   
+    console.log(result1)
+
     if(result1==req.body.password)
     {
-      const [result2] =  await connection.query("DELETE FROM comments WHERE commentID ='"+req.body.commentID+"'")
-      res.send(200,'delete');
+        const [result2] =  await connection.query("DELETE FROM comments WHERE commentID ='"+req.body.commentID+"'")
+        res.send(200,'delete');
     }
     else 
     {
