@@ -33,7 +33,7 @@ exports.create = async (req, res) => {
 };
 
 
-exports.delete = (req, res) => {
+exports.delete = async (req, res) => {
 
       const connection = await DBConnector.getConnection()
 
