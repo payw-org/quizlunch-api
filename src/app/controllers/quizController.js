@@ -1,8 +1,8 @@
 const DBConnector = require('../db/DBConnector');
-const connection = DBConnector.getConnection()
   
-  exports.get = (req, res) => {
+  exports.get = async (req, res)  => {
     
+    const connection = await DBConnector.getConnection()
     connection.query("SELECT * from quizs where quizID='"+req.body.quizID+"'", function(err,  rows, fields) {
       if (!err)
       {
@@ -20,6 +20,8 @@ const connection = DBConnector.getConnection()
 
   exports.create = (req, res) => {
     
+    const connection = await DBConnector.getConnection()
+
     var today = new Date();
     var date = today.getFullYear()+'-'+(today.getMonth()+1)+'-'+today.getDate();
     var time = today.getHours() + ":" + today.getMinutes() + ":" + today.getSeconds();
@@ -51,6 +53,8 @@ const connection = DBConnector.getConnection()
 
   exports.correctCheck = (req, res) => {
     
+    const connection = await DBConnector.getConnection()
+
     connection.query("SELECT answer from quizs where quizID='"+req.body.quizID+"'", function(err,  rows, fields) {
       if (!err)
       {
@@ -71,6 +75,8 @@ const connection = DBConnector.getConnection()
   };
 
   exports.updateGotAnswer = (req, res) => {
+
+    const connection = await DBConnector.getConnection()
     
     connection.query("UPDATE quizs set gotAnswer ='" +1+"'" +" where quizID='"+ req.body.quizID+"'", function(err,  rows, fields) {
       if (!err)
