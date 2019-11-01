@@ -45,10 +45,11 @@ exports.delete = async (req, res) => {
 
       if(pwd==req.body.password)
       {
-        const [result] = await connection.query("DELETE FROM comments WHERE commentID ='"+req.body.commentID+"'", function(err,  rows, fields) {
+          connection.query("DELETE FROM comments WHERE commentID ='"+req.body.commentID+"'", function(err,  rows, fields) {
           if (!err)
           {
-            res.send(result)
+              console.log('delete comments');
+              res.send(200,'suecess deleting');
           }
           else
               console.log('Error while delete comments performing Query.', err);
@@ -62,6 +63,20 @@ exports.delete = async (req, res) => {
     else
       console.log('Error while performing Select comments password Query.', err);
   });
+
+
+      
+
+    //   const [result] = await connection.query("DELETE FROM comments WHERE commentID in (SELECT commentID from comments where commentID='"+req.body.commentID+"' and password='"+req.body.password+"')", function(err,  rows, fields) {
+    //   if (!err)
+    //   {
+    //     res.send(result)
+    //   }
+    //   else
+    //     console.log('Error while performing Select comments password Query.', err);
+    // });
+
+
     
 
     
