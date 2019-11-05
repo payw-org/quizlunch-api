@@ -5,7 +5,7 @@ const router = express.Router();
 
 const commentController = require('../controllers/commentController');
 
-router.get('/', commentController.getOneQuizComments);
+router.get('/:quizID', commentController.getOneQuizComments);
 
 router.post('/', commentController.create);
 
