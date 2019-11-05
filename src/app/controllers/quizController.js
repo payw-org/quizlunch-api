@@ -3,10 +3,13 @@ const DBConnector = require('../db/DBConnector');
   exports.get = async (req, res)  => {
     
     const connection = await DBConnector.getConnection()
-    const [result] = await connection.query("SELECT * from quizs where quizID='"+req.body.quizID+"'")
+    const [result] = await connection.query("SELECT * from quizs where quizID='"+req.params.quizID+"'")
      
+    if(result[0].gotAnswer==0)
+    {
+      result[0].answer="정답은 안알랴쥼"
+    }
     res.send(result)
-
 
   };
 
@@ -43,7 +46,7 @@ const DBConnector = require('../db/DBConnector');
     const connection = await DBConnector.getConnection()
 
     const [result] = await connection.query("SELECT answer from quizs where quizID='"+req.body.quizID+"'")
-    if(result[0].answer==req.body.answer)
+    if(result[0].answer==req.params.answer)
     {
         console.log('Correct Answer');
         res.send("correct")
@@ -62,5 +65,5 @@ const DBConnector = require('../db/DBConnector');
     
     const [result] = await connection.query("UPDATE quizs set gotAnswer ='" +1+"'" +" where quizID='"+ req.body.quizID+"'")
     
-    res.send(result)
+    res.send("update gotAnser")
   };

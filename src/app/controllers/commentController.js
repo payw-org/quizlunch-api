@@ -5,6 +5,9 @@ const DBConnector = require('../db/DBConnector');
 exports.getOneQuizComments = async (req, res) => {
   const connection = await DBConnector.getConnection()
   const [result] = await connection.query("SELECT * from comments where quizID='"+req.params['quizID']+"'")
+  
+
+
   res.send(result)
 };
 
@@ -14,6 +17,10 @@ exports.create = async (req, res) => {
     var today = new Date();
     var date = today.getFullYear()+'-'+(today.getMonth()+1)+'-'+today.getDate();
     var time = today.getHours() + ":" + today.getMinutes() + ":" + today.getSeconds();
+    var ip = req.headers['x-forwarded-for'] ||
+     req.connection.remoteAddress ||
+     req.socket.remoteAddress ||
+     req.connection.socket.remoteAddress;
     var dateTime = date + ' ' + time;
 
 
@@ -22,7 +29,7 @@ exports.create = async (req, res) => {
                 'nickname':req.body.nickname,
                 'password':req.body.password,
                 'text':req.body.text,
-                'ip':req.body.ip,
+                'ip':ip,
                 'time':dateTime 
             };
  

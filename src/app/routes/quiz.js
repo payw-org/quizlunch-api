@@ -5,9 +5,9 @@ const router = express.Router();
 
 const quizController = require('../controllers/quizController');
 
-router.get('/', quizController.get);
+router.get('/:quizID', quizController.get);
 
-router.get('/correctCheck', quizController.correctCheck);
+router.get('/:quizID/:answer', quizController.correctCheck);
 
 router.post('/', quizController.create);
 
