@@ -1,12 +1,14 @@
 const DBConnector = require('../db/DBConnector');
 
 
-
 exports.getOneQuizComments = async (req, res) => {
   const connection = await DBConnector.getConnection()
   const [result] = await connection.query("SELECT * from comments where quizID='"+req.params['quizID']+"'")
-  
 
+  for(var i=0;i<result.length;i++)
+  {
+    result[i].ip=result[i].ip.substring(0,7)
+  }
 
   res.send(result)
 };
