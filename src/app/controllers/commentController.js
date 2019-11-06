@@ -28,11 +28,15 @@ exports.create = async (req, res) => {
     var dateTime = date + ' ' + time;
 
     var [nickname] = await connection.query("SELECT nickname from nicknames where ip='"+ip+"'")
+    console.log("nickname length")
     console.log(nickname.length)
     if(nickname.length==0)
     {
       nickname = await axios.get('http://rng.api.quizlunch.com/new');
+      console.log("nickname")
+      console.log(nickname)
       const newNickNameUpdate = await connection.query("insert into nicknames (ip ,nickname) VALUES ('"+ ip + "', '" + nickname + "') ");
+      console.log("nickname update")
       console.log(newNickNameUpdate)
     }   
     else
