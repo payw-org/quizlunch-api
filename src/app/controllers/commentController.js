@@ -1,5 +1,5 @@
 const DBConnector = require('../db/DBConnector');
-
+const WSConnector = require('../websocket/WSConnector');
 
 exports.getOneQuizComments = async (req, res) => {
   const connection = await DBConnector.getConnection()
@@ -10,7 +10,6 @@ exports.getOneQuizComments = async (req, res) => {
     delete result[i].password;
     result[i].ip=result[i].ip.substring(0,7)
   }
-
   res.send(result)
 };
 
@@ -50,10 +49,19 @@ exports.create = async (req, res) => {
                 'time':dateTime 
             };
  
-    const [result] = await connection.query("insert into comments (quizID ,nickname, password, text, ip ,time ) VALUES ('"+ comment.quizID + "', '" + comment.nickname + "', '" + comment.password+ "', '" + comment.text+ "', '" + comment.ip+ "', '" + comment.time+ "') ")
+    var [result] = await connection.query("insert into comments (quizID ,nickname, password, text, ip ,time ) VALUES ('"+ comment.quizID + "', '" + comment.nickname + "', '" + comment.password+ "', '" + comment.text+ "', '" + comment.ip+ "', '" + comment.time+ "') ")
 
     res.send(result)
-};
+
+    ;[result] = await connection.query("SELECT * from comments where quizID='1'")
+    for(var i=0;i<result.length;i++)
+    {
+      delete result[i].password;
+      result[i].ip=result[i].ip.substring(0,7)
+    }
+    WSConnector.broadcast(result)
+
+  };
 
 
 exports.delete = async (req, res) => {
