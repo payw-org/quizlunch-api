@@ -7,6 +7,7 @@ exports.getOneQuizComments = async (req, res) => {
 
   for(var i=0;i<result.length;i++)
   {
+    result[i].password="안알랴줌"
     result[i].ip=result[i].ip.substring(0,7)
   }
 
@@ -32,11 +33,8 @@ exports.create = async (req, res) => {
     {
       const gotAxios = await axios.get('http://rng.api.quizlunch.com/new');
       nickname = gotAxios.data
-      console.log("nickname")
-      console.log(nickname)
       const newNickNameUpdate = await connection.query("insert into nicknames (ip ,nickname) VALUES ('"+ ip + "', '" + nickname + "') ");
-      console.log("nickname update")
-      console.log(newNickNameUpdate)
+      console.log("new nickname update")
     }   
     else
     {
