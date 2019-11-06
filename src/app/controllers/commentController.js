@@ -16,6 +16,8 @@ exports.getOneQuizComments = async (req, res) => {
   
 exports.create = async (req, res) => {
     const connection = await DBConnector.getConnection()
+    const axios = require('axios');
+
     var today = new Date();
     var date = today.getFullYear()+'-'+(today.getMonth()+1)+'-'+today.getDate();
     var time = today.getHours() + ":" + today.getMinutes() + ":" + today.getSeconds();
@@ -25,10 +27,19 @@ exports.create = async (req, res) => {
      req.connection.socket.remoteAddress;
     var dateTime = date + ' ' + time;
 
+    var nickname = await connection.query("SELECT nickname from nicknames where ip='"+ip+"'")
+    if(nickname.length==0)
+    {
+      nickname = await axios.get('http://rng.api.quizlunch.com/new');
+    } 
+    else
+    {
+      nickname=nickname[0].nickname
+    }
 
     var comment = {
                 'quizID':req.body.quizID,
-                'nickname':req.body.nickname,
+                'nickname':nickname,
                 'password':req.body.password,
                 'text':req.body.text,
                 'ip':ip,
