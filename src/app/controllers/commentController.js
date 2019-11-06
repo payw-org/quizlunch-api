@@ -31,7 +31,9 @@ exports.create = async (req, res) => {
     if(nickname.length==0)
     {
       nickname = await axios.get('http://rng.api.quizlunch.com/new');
-    } 
+      const newNickNameUpdate = await connection.query("insert into nicknames (ip ,nickname) VALUES ('"+ ip + "', '" + nickname + "') ");
+      console.log(newNickNameUpdate)
+    }   
     else
     {
       nickname=nickname[0].nickname
