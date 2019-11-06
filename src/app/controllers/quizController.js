@@ -7,7 +7,6 @@ const DBConnector = require('../db/DBConnector');
      
     if(result[0].gotAnswer==0)
     {
-      // result[0].answer="정답은 안알랴쥼"
       delete result[0].answer;
 
     }
