@@ -7,7 +7,8 @@ exports.getOneQuizComments = async (req, res) => {
 
   for(var i=0;i<result.length;i++)
   {
-    result[i].password="안알랴줌"
+    // result[i].password="안알랴줌"
+    delete result[i].password;
     result[i].ip=result[i].ip.substring(0,7)
   }
 
