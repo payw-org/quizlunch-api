@@ -53,7 +53,7 @@ exports.create = async (req, res) => {
 
     res.send(result)
 
-    ;[result] = await connection.query("SELECT * from comments where quizID='1'")
+    ;[result] = await connection.query("SELECT * from comments where quizID='1' ORDER BY commentID DESC LIMIT 20")
     for(var i=0;i<result.length;i++)
     {
       delete result[i].password;
