@@ -1,14 +1,14 @@
 const DBConnector = require('../db/DBConnector');
 // const WSConnector = require('../websocket/WSConnector');
 
-exports.getOneQuizComments = async (ws, req) => {
+exports.getOneQuizComments = async (req, res) => {
 
-  ws.on("getComment",function(quizID){
+  // ws.on("getComment", async function(quizID){
 
     const comments = await DBConnector.getOneQuiz20Comments(quizID)
-    ws.send(JSON.stringify(comments))
+    res.send(JSON.stringify(comments))
 
-  });
+  // });
   
 };
 
