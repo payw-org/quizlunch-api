@@ -5,7 +5,7 @@ exports.getOneQuizComments = async (req, res) => {
 
   // ws.on("getComment", async function(quizID){
 
-    const comments = await DBConnector.getOneQuiz20Comments(req.param.quizID)
+    const comments = await DBConnector.getOneQuiz20Comments(req.params.quizID)
     res.send(JSON.stringify(comments))
 
   // });
@@ -41,7 +41,7 @@ exports.create = async (req, res) => {
     }
 
     var comment = {
-                'quizID':req.param.quizID,
+                'quizID':req.params.quizID,
                 'nickname':nickname,
                 'password':req.body.password,
                 'text':req.body.comment,
