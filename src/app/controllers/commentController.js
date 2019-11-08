@@ -13,9 +13,9 @@ exports.getOneQuizComments = async (req, res) => {
 };
 
   
-exports.create = async (ws, req) => {
+exports.create = async (req, res) => {
 
-  ws.on("creatComment",function(data){
+  // ws.on("creatComment",function(data){
 
   const axios = require('axios');
 
@@ -41,10 +41,10 @@ exports.create = async (ws, req) => {
     }
 
     var comment = {
-                'quizID':data.quizID,
+                'quizID':req.body.quizID,
                 'nickname':nickname,
-                'password':data.password,
-                'text':data.comment,
+                'password':req.body.password,
+                'text':req.body.comment,
                 'ip':ip,
                 'time':dateTime 
             };
@@ -52,8 +52,8 @@ exports.create = async (ws, req) => {
     await DBConnector.insertComment(comment)
 
     const comments = await DBConnector.getOneQuiz20Comments(req.body.quizID)
-    ws.send(JSON.stringify(comments))
-  });
+    res.send(JSON.stringify(comments))
+  // });
 
   };
 
