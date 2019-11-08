@@ -15,16 +15,27 @@ class DBConnector {
     if(!this.connection){
       this.connection = await mysql.createConnection(config)      
     }
-    result= await this.connection.query("SELECT * from comments where quizID='"+ quizID + "' ORDER BY commentID DESC LIMIT 20")
-    return result
+    var [comments]= await this.connection.query("SELECT * from comments where quizID='"+ quizID + "' ORDER BY commentID DESC LIMIT 20")
+    for(var i=0;i<comments.length;i++)
+    {
+      delete comments[i].password;
+      comments[i].ip=comments[i].ip.substring(0,7)
+    }
+
+    return comments
   }
 
   static async getOneQuizAllComments(quizID){
     if(!this.connection){
       this.connection = await mysql.createConnection(config)      
     }
-    result= await this.connection.query("SELECT * from comments where quizID='"+ quizID + "' ORDER BY commentID DESC")
-    return result
+    var [comments]= await this.connection.query("SELECT * from comments where quizID='"+ quizID + "' ORDER BY commentID DESC")
+    for(var i=0;i<comments.length;i++)
+    {
+      delete comments[i].password;
+      comments[i].ip=comments[i].ip.substring(0,7)
+    }
+    return comments
   }
 
 
@@ -72,8 +83,13 @@ class DBConnector {
     if(!this.connection){
       this.connection = await mysql.createConnection(config)      
     }
-    result= await this.connection.query("SELECT * from quizs where quizID='"+quizID+"'")
-    return result
+    var [quiz]= await this.connection.query("SELECT * from quizs where quizID='"+quizID+"'")
+    if(quiz[0].gotAnswer==0)
+    {
+      delete quiz[0].answer;
+
+    }
+    return quiz
   }
 
   static async insertQuiz(quiz){

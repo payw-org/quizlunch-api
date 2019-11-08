@@ -2,13 +2,7 @@ const DBConnector = require('../db/DBConnector');
   
   exports.get = async (req, res)  => {
     
-    const [quiz] = await DBConnector.getOneQuiz(req.params.quizID)
-     
-    if(quiz[0].gotAnswer==0)
-    {
-      delete quiz[0].answer;
-
-    }
+    const quiz = await DBConnector.getOneQuiz(req.params.quizID)
     res.send(quiz)
 
   };

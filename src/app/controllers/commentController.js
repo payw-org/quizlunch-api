@@ -5,13 +5,7 @@ exports.getOneQuizComments = async (ws, req) => {
 
   ws.on("getComment",function(quizID){
 
-    const [comments] = await DBConnector.getOneQuiz20Comments(quizID)
-
-    for(var i=0;i<comments.length;i++)
-    {
-      delete comments[i].password;
-      comments[i].ip=comments[i].ip.substring(0,7)
-    }
+    const comments = await DBConnector.getOneQuiz20Comments(quizID)
     ws.send(JSON.stringify(comments))
 
   });
@@ -57,13 +51,7 @@ exports.create = async (ws, req) => {
  
     await DBConnector.insertComment(comment)
 
-    const [comments] = await DBConnector.getOneQuiz20Comments(req.body.quizID)
-
-    for(var i=0;i<comments.length;i++)
-    {
-      delete comments[i].password;
-      comments[i].ip=comments[i].ip.substring(0,7)
-    }
+    const comments = await DBConnector.getOneQuiz20Comments(req.body.quizID)
     ws.send(JSON.stringify(comments))
   });
 
