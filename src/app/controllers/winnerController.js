@@ -3,9 +3,6 @@ const DBConnector = require('../db/DBConnector');
 
   exports.create = async (req, res) => {
     
-
-    const connection = await DBConnector.getConnection()
-
     var today = new Date();
     var date = today.getFullYear()+'-'+(today.getMonth()+1)+'-'+today.getDate();
     var time = today.getHours() + ":" + today.getMinutes() + ":" + today.getSeconds();
@@ -24,7 +21,7 @@ const DBConnector = require('../db/DBConnector');
                 'time':dateTime 
             };
 
-    const [result] = await connection.query("insert into winners(quizID,nickname,text,ip,time) VALUES ('"+ winner.quizID + "', '" + winner.nickname + "','"+ winner.text + "', '" + winner.ip+ "', '" + winner.time + "') ")
+    const [result] = await DBConnector.insertWinner
     
     res.send("winner create sucsess")
   };

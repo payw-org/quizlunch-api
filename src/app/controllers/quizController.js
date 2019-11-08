@@ -2,28 +2,24 @@ const DBConnector = require('../db/DBConnector');
   
   exports.get = async (req, res)  => {
     
-    const connection = await DBConnector.getConnection()
-    const [result] = await connection.query("SELECT * from quizs where quizID='"+req.params.quizID+"'")
+    const [quiz] = await DBConnector.getOneQuiz(req.params.quizID)
      
-    if(result[0].gotAnswer==0)
+    if(quiz[0].gotAnswer==0)
     {
-      delete result[0].answer;
+      delete quiz[0].answer;
 
     }
-    res.send(result)
+    res.send(quiz)
 
   };
 
 
   exports.create = async (req, res) => {
     
-    const connection = await DBConnector.getConnection()
-
     var today = new Date();
     var date = today.getFullYear()+'-'+(today.getMonth()+1)+'-'+today.getDate();
     var time = today.getHours() + ":" + today.getMinutes() + ":" + today.getSeconds();
     var dateTime = date + ' ' + time;
-
 
     var quiz = {
                 'title':req.body.title,
@@ -34,7 +30,7 @@ const DBConnector = require('../db/DBConnector');
                 'gotAnswer': 0
             };
 
-    const [result] = await connection.query("insert into quizs(title,picture,information,answer,time,gotAnswer) VALUES ('"+ quiz.title + "', '" + quiz.picture + "','"+ quiz.information + "', '" + quiz.answer+ "', '" + quiz.time +"', '" + quiz.gotAnswer + "') ")
+    const [result] = await DBConnector.insertQuiz(quiz)
 
     res.send(result)
 
@@ -44,10 +40,8 @@ const DBConnector = require('../db/DBConnector');
 
   exports.correctCheck = async (req, res) => {
     
-    const connection = await DBConnector.getConnection()
-
-    const [result] = await connection.query("SELECT answer from quizs where quizID='"+req.body.quizID+"'")
-    if(result[0].answer==req.params.answer)
+    const [answer] = await DBConnector.findAnswer()
+    if(answer[0].answer==req.params.answer)
     {
         console.log('Correct Answer');
         res.send("correct")
@@ -61,10 +55,8 @@ const DBConnector = require('../db/DBConnector');
   };
 
   exports.updateGotAnswer = async (req, res) => {
-
-    const connection = await DBConnector.getConnection()
     
-    const [result] = await connection.query("UPDATE quizs set gotAnswer ='" +1+"'" +" where quizID='"+ req.body.quizID+"'")
+    await DBConnector.updateGotAnswer(req.body.quizID)
     
     res.send("update gotAnser")
   };

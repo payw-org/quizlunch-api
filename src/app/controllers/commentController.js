@@ -1,22 +1,29 @@
 const DBConnector = require('../db/DBConnector');
-const WSConnector = require('../websocket/WSConnector');
+// const WSConnector = require('../websocket/WSConnector');
 
-exports.getOneQuizComments = async (req, res) => {
-  const connection = await DBConnector.getConnection()
-  const [result] = await connection.query("SELECT * from comments where quizID='"+req.params['quizID']+"'")
+exports.getOneQuizComments = async (ws, req) => {
 
-  for(var i=0;i<result.length;i++)
-  {
-    delete result[i].password;
-    result[i].ip=result[i].ip.substring(0,7)
-  }
-  res.send(result)
+  ws.on("getComment",function(quizID){
+
+    const [comments] = await DBConnector.getOneQuiz20Comments(quizID)
+
+    for(var i=0;i<comments.length;i++)
+    {
+      delete comments[i].password;
+      comments[i].ip=comments[i].ip.substring(0,7)
+    }
+    ws.send(JSON.stringify(comments))
+
+  });
+  
 };
 
   
-exports.create = async (req, res) => {
-    const connection = await DBConnector.getConnection()
-    const axios = require('axios');
+exports.create = async (ws, req) => {
+
+  ws.on("creatComment",function(data){
+
+  const axios = require('axios');
 
     var today = new Date();
     var date = today.getFullYear()+'-'+(today.getMonth()+1)+'-'+today.getDate();
@@ -27,13 +34,12 @@ exports.create = async (req, res) => {
      req.connection.socket.remoteAddress;
     var dateTime = date + ' ' + time;
 
-    var [nickname] = await connection.query("SELECT nickname from nicknames where ip='"+ip+"'")
+    var [nickname] = await DBConnector.findNickname(ip)
     if(nickname.length==0)
     {
       const gotAxios = await axios.get('http://rng.api.quizlunch.com/new');
       nickname = gotAxios.data
-      const newNickNameUpdate = await connection.query("insert into nicknames (ip ,nickname) VALUES ('"+ ip + "', '" + nickname + "') ");
-      console.log("new nickname update")
+      const newNickNameUpdate = await DBConnector.insertNickname(ip,nickname)
     }   
     else
     {
@@ -41,39 +47,46 @@ exports.create = async (req, res) => {
     }
 
     var comment = {
-                'quizID':req.body.quizID,
+                'quizID':data.quizID,
                 'nickname':nickname,
-                'password':req.body.password,
-                'text':req.body.text,
+                'password':data.password,
+                'text':data.comment,
                 'ip':ip,
                 'time':dateTime 
             };
  
-    var [result] = await connection.query("insert into comments (quizID ,nickname, password, text, ip ,time ) VALUES ('"+ comment.quizID + "', '" + comment.nickname + "', '" + comment.password+ "', '" + comment.text+ "', '" + comment.ip+ "', '" + comment.time+ "') ")
+    await DBConnector.insertComment(comment)
 
-    res.send(result)
+    const [comments] = await DBConnector.getOneQuiz20Comments(req.body.quizID)
 
-    ;[result] = await connection.query("SELECT * from comments where quizID='1' ORDER BY commentID DESC LIMIT 20")
-    for(var i=0;i<result.length;i++)
+    for(var i=0;i<comments.length;i++)
     {
-      delete result[i].password;
-      result[i].ip=result[i].ip.substring(0,7)
+      delete comments[i].password;
+      comments[i].ip=comments[i].ip.substring(0,7)
     }
-    WSConnector.broadcast(result)
+    ws.send(JSON.stringify(comments))
+  });
 
   };
 
 
 exports.delete = async (req, res) => {
 
-  const connection = await DBConnector.getConnection()
-
-    const [result1] =  await connection.query("SELECT password from comments where commentID='"+req.body.commentID+"'")
-    if(result1[0].password==req.body.password)
+    const [password] =  await DBConnector.findPassword(req.body.commentID)
+    if(password[0].password==req.body.password)
     {
-        const [result2] =  await connection.query("DELETE FROM comments WHERE commentID ='"+req.body.commentID+"'")
+        await DBConnector.deleteComment(req.body.commentID)
         res.send(200,'delete');
-    }
+
+        var [result] = await DBConnector.getOneQuiz20Comments(quizID)
+
+        for(var i=0;i<result.length;i++)
+        {
+          delete result[i].password;
+          result[i].ip=result[i].ip.substring(0,7)
+        }
+        WSConnector.broadcast(result)
+        }
     else 
     {
         res.send(200,'wrong password');
@@ -83,14 +96,7 @@ exports.delete = async (req, res) => {
 
       
 
-    //   const [result] = await connection.query("DELETE FROM comments WHERE commentID in (SELECT commentID from comments where commentID='"+req.body.commentID+"' and password='"+req.body.password+"')", function(err,  rows, fields) {
-    //   if (!err)
-    //   {
-    //     res.send(result)
-    //   }
-    //   else
-    //     console.log('Error while performing Select comments password Query.', err);
-    // });
+
 
 
     
