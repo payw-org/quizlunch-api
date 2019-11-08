@@ -5,9 +5,9 @@ const router = express.Router();
 
 const commentController = require('../controllers/commentController');
 
-router.ws('/', commentController.getOneQuizComments);
+router.get('/:quizID', commentController.getOneQuizComments);
 
-router.post('/', commentController.create);
+router.post('/:quizID', commentController.create);
 
 router.delete('/', commentController.delete);
 
