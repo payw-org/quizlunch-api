@@ -46,7 +46,7 @@ const DBConnector = require('../db/DBConnector');
     
     const connection = await DBConnector.getConnection()
 
-    const [result] = await connection.query("SELECT answer from quizs where quizID='"+req.body.quizID+"'")
+    const [result] = await connection.query("SELECT answer from quizs where quizID='"+req.params.quizID+"'")
     if(result[0].answer==req.params.answer)
     {
         console.log('Correct Answer');
