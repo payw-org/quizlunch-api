@@ -11,6 +11,9 @@ class DBConnector {
     return this.connection
   }
   
+
+
+  
   static async getOneQuiz20Comments(quizID){
     if(!this.connection){
       this.connection = await mysql.createConnection(config)      
@@ -77,6 +80,14 @@ class DBConnector {
     }
     const [result]= await this.connection.query("DELETE FROM comments WHERE commentID ='"+commentID+"'")
     return result
+  }
+
+  static async getLastestQuizID(){
+    if(!this.connection){
+      this.connection = await mysql.createConnection(config)      
+    }
+    var [quizID]= await this.connection.query("SELECT quizID from quizs ORDER BY quizID DESC")
+    return quizID[0].quizID
   }
 
   static async getOneQuiz(quizID){

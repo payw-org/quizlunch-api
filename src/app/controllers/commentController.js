@@ -1,10 +1,10 @@
 const DBConnector = require('../db/DBConnector');
 const WSConnector = require('../websocket/WSConnector');
 
-exports.getOneQuizComments = async (req, res) => {
-  const result = DBConnector.getOneQuiz20Comments(req.params.quizID)  
-  res.send(result)
-};
+// exports.getOneQuizComments = async (req, res) => {
+//   const result = DBConnector.getOneQuiz20Comments(req.params.quizID)  
+//   res.send(result)
+// };
 
   
 exports.create = async (req, res) => {
@@ -42,8 +42,8 @@ exports.create = async (req, res) => {
  
     await DBConnector.insertComment(comment)
 
-    const comments = DBConnector.getOneQuiz20Comments(req.params.quizID)  
-    WSConnector.broadcast(comments)
+    const comments = await DBConnector.getOneQuiz20Comments(req.params.quizID)  
+    WSConnector.commentsBroadcast(comments)
 
   };
 
@@ -55,8 +55,8 @@ exports.delete = async (req, res) => {
     if(password[0].password==req.body.password)
     {
         await DBConnector.deleteComment(req.body.commentID)
-        const comments = DBConnector.getOneQuiz20Comments(req.params.quizID)  
-        WSConnector.broadcast(comments)
+        const comments = await DBConnector.getOneQuiz20Comments(req.params.quizID)  
+        WSConnector.commentsBroadcast(comments)
     }
     else 
     {

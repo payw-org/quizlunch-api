@@ -1,11 +1,13 @@
 const DBConnector = require('../db/DBConnector');
-  
-  exports.get = async (req, res)  => {
-    
-    const quiz = await DBConnector.getOneQuiz(req.params.quizID)
-    res.send(quiz)
+const WSConnector = require('../websocket/WSConnector');
 
-  };
+
+  // exports.get = async (req, res)  => {
+    
+  //   const quiz = await DBConnector.getOneQuiz(req.params.quizID)
+  //   res.send(quiz)
+
+  // };
 
 
   exports.create = async (req, res) => {
@@ -25,7 +27,8 @@ const DBConnector = require('../db/DBConnector');
             };
 
     const result = await DBConnector.insertQuiz(quiz)
-    res.send(result)
+    // const quiz = await DBConnector.getOneQuiz(req.body.quizID)  
+    // WSConnector.quizBroadcast(quiz)
   };
 
 
@@ -48,5 +51,6 @@ const DBConnector = require('../db/DBConnector');
   exports.updateGotAnswer = async (req, res) => {
 
     const result = await DBConnector.updateGotAnswer(req.body.quizID)
-    res.send("update gotAnser")
+    const quiz = await DBConnector.getOneQuiz(req.body.quizID)  
+    WSConnector.quizBroadcast(quiz)
   };
