@@ -18,6 +18,7 @@ module.exports = class WSConnector {
             data.comments = result
 
             ;result = await DBConnector.getOneQuiz(latestQuizID)
+
             data.quiz = result[0]
             
             ws.send(JSON.stringify(data))
@@ -42,6 +43,7 @@ module.exports = class WSConnector {
         this.WSS.clients.forEach((client)=>{
             if(client.readyState == WebSocketServer.OPEN){
                 client.send(JSON.stringify({quiz:data}))
+
             }
         })
     }

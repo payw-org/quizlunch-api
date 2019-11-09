@@ -12,8 +12,6 @@ class DBConnector {
   }
   
 
-
-  
   static async getOneQuiz20Comments(quizID){
     if(!this.connection){
       this.connection = await mysql.createConnection(config)      
@@ -47,6 +45,7 @@ class DBConnector {
       this.connection = await mysql.createConnection(config)      
     }
     const [result]= await this.connection.query("insert into nicknames (ip ,nickname) VALUES ('"+ ip + "', '" + nickname + "') ");
+
     return result
   }
 
@@ -89,6 +88,7 @@ class DBConnector {
     var [quizID]= await this.connection.query("SELECT quizID from quizs ORDER BY quizID DESC")
     return quizID[0].quizID
   }
+
 
   static async getOneQuiz(quizID){
     if(!this.connection){
