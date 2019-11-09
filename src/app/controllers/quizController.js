@@ -24,17 +24,15 @@ const DBConnector = require('../db/DBConnector');
                 'gotAnswer': 0
             };
 
-    const [result] = await DBConnector.insertQuiz(quiz)
-
+    const result = await DBConnector.insertQuiz(quiz)
     res.send(result)
-
   };
 
 
 
   exports.correctCheck = async (req, res) => {
     
-    const [answer] = await DBConnector.findAnswer()
+    const answer = await DBConnector.findAnswer()
     if(answer[0].answer==req.params.answer)
     {
         console.log('Correct Answer');
@@ -45,12 +43,10 @@ const DBConnector = require('../db/DBConnector');
         console.log('wrong answer');
         res.send("wrong")
     }
-    
   };
 
   exports.updateGotAnswer = async (req, res) => {
-    
-    await DBConnector.updateGotAnswer(req.body.quizID)
-    
+
+    const result = await DBConnector.updateGotAnswer(req.body.quizID)
     res.send("update gotAnser")
   };

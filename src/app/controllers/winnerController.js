@@ -21,7 +21,6 @@ const DBConnector = require('../db/DBConnector');
                 'time':dateTime 
             };
 
-    const [result] = await DBConnector.insertWinner
-    
+    const result = await DBConnector.insertWinner
     res.send("winner create sucsess")
   };

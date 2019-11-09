@@ -1,11 +1,8 @@
 require('dotenv').config()
 const express = require('express');
-
 const app = express();
-
-const expressWS = require('express-ws')(app);
-
 const bodyParser = require('body-parser')
+const WSConnector = require('./websocket/WSConnector')
 const port = 3200;
 
 // solve cors problem
@@ -25,3 +22,4 @@ app.listen(port, () => {
   console.log('Example app listening on port ' + port);
 })
 
+WSConnector.connect()

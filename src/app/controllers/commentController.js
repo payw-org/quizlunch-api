@@ -1,23 +1,14 @@
 const DBConnector = require('../db/DBConnector');
-// const WSConnector = require('../websocket/WSConnector');
+const WSConnector = require('../websocket/WSConnector');
 
 exports.getOneQuizComments = async (req, res) => {
-
-  // ws.on("getComment", async function(quizID){
-
-    const comments = await DBConnector.getOneQuiz20Comments(req.params.quizID)
-    res.send(JSON.stringify(comments))
-
-  // });
-  
+  const result = DBConnector.getOneQuiz20Comments(req.params.quizID)  
+  res.send(result)
 };
 
   
 exports.create = async (req, res) => {
-
-  // ws.on("creatComment",function(data){
-
-  const axios = require('axios');
+    const axios = require('axios');
 
     var today = new Date();
     var date = today.getFullYear()+'-'+(today.getMonth()+1)+'-'+today.getDate();
@@ -28,7 +19,7 @@ exports.create = async (req, res) => {
      req.connection.socket.remoteAddress;
     var dateTime = date + ' ' + time;
 
-    var [nickname] = await DBConnector.findNickname(ip)
+    var nickname = await DBConnector.findNickname(ip)
     if(nickname.length==0)
     {
       const gotAxios = await axios.get('http://rng.api.quizlunch.com/new');
@@ -41,40 +32,32 @@ exports.create = async (req, res) => {
     }
 
     var comment = {
-                'quizID':req.params.quizID,
+                'quizID':req.body.quizID,
                 'nickname':nickname,
                 'password':req.body.password,
-                'text':req.body.comment,
+                'text':req.body.text,
                 'ip':ip,
                 'time':dateTime 
             };
  
     await DBConnector.insertComment(comment)
 
-    const comments = await DBConnector.getOneQuiz20Comments(req.body.quizID)
-    res.send(JSON.stringify(comments))
-  // });
+    const comments = DBConnector.getOneQuiz20Comments(req.params.quizID)  
+    WSConnector.broadcast(comments)
 
   };
 
 
 exports.delete = async (req, res) => {
 
-    const [password] =  await DBConnector.findPassword(req.body.commentID)
+    const password =  await DBConnector.findPassword(req.body.commentID)
+
     if(password[0].password==req.body.password)
     {
         await DBConnector.deleteComment(req.body.commentID)
-        res.send(200,'delete');
-
-        var [result] = await DBConnector.getOneQuiz20Comments(quizID)
-
-        for(var i=0;i<result.length;i++)
-        {
-          delete result[i].password;
-          result[i].ip=result[i].ip.substring(0,7)
-        }
-        WSConnector.broadcast(result)
-        }
+        const comments = DBConnector.getOneQuiz20Comments(req.params.quizID)  
+        WSConnector.broadcast(comments)
+    }
     else 
     {
         res.send(200,'wrong password');
@@ -82,11 +65,7 @@ exports.delete = async (req, res) => {
 };
 
 
-      
-
-
-
-
+  
     
 
   

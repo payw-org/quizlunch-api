@@ -43,7 +43,7 @@ class DBConnector {
     if(!this.connection){
       this.connection = await mysql.createConnection(config)      
     }
-    result= await this.connection.query("insert into nicknames (ip ,nickname) VALUES ('"+ ip + "', '" + nickname + "') ");
+    const [result]= await this.connection.query("insert into nicknames (ip ,nickname) VALUES ('"+ ip + "', '" + nickname + "') ");
     return result
   }
 
@@ -51,7 +51,7 @@ class DBConnector {
     if(!this.connection){
       this.connection = await mysql.createConnection(config)      
     }
-    result= await this.connection.query("SELECT nickname from nicknames where ip='"+ip+"'")
+    const [result]= await this.connection.query("SELECT nickname from nicknames where ip='"+ip+"'")
     return result
   }
 
@@ -59,7 +59,7 @@ class DBConnector {
     if(!this.connection){
       this.connection = await mysql.createConnection(config)      
     }
-    result= await this.connection.query("insert into comments (quizID ,nickname, password, text, ip ,time ) VALUES ('"+ comment.quizID + "', '" + comment.nickname + "', '" + comment.password+ "', '" + comment.text+ "', '" + comment.ip+ "', '" + comment.time+ "') ")
+    const [result]= await this.connection.query("insert into comments (quizID ,nickname, password, text, ip ,time ) VALUES ('"+ comment.quizID + "', '" + comment.nickname + "', '" + comment.password+ "', '" + comment.text+ "', '" + comment.ip+ "', '" + comment.time+ "') ")
     return result
   }
 
@@ -67,7 +67,7 @@ class DBConnector {
     if(!this.connection){
       this.connection = await mysql.createConnection(config)      
     }
-    result= await this.connection.query("SELECT password from comments where commentID='"+commentID+"'")
+    const [result]= await this.connection.query("SELECT password from comments where commentID='"+commentID+"'")
     return result
   }
 
@@ -75,7 +75,7 @@ class DBConnector {
     if(!this.connection){
       this.connection = await mysql.createConnection(config)      
     }
-    result= await this.connection.query("DELETE FROM comments WHERE commentID ='"+commentID+"'")
+    const [result]= await this.connection.query("DELETE FROM comments WHERE commentID ='"+commentID+"'")
     return result
   }
 
@@ -96,7 +96,7 @@ class DBConnector {
     if(!this.connection){
       this.connection = await mysql.createConnection(config)      
     }
-    result= await this.connection.query("insert into quizs(title,picture,information,answer,time,gotAnswer) VALUES ('"+ quiz.title + "', '" + quiz.picture + "','"+ quiz.information + "', '" + quiz.answer+ "', '" + quiz.time +"', '" + quiz.gotAnswer + "') ")
+    const [result]= await this.connection.query("insert into quizs(title,picture,information,answer,time,gotAnswer) VALUES ('"+ quiz.title + "', '" + quiz.picture + "','"+ quiz.information + "', '" + quiz.answer+ "', '" + quiz.time +"', '" + quiz.gotAnswer + "') ")
     return result
   }
 
@@ -104,15 +104,15 @@ class DBConnector {
     if(!this.connection){
       this.connection = await mysql.createConnection(config)      
     }
-    result= await this.connection.query("SELECT answer from quizs where quizID='"+quizID+"'")
-    return result
+    const [answer]= await this.connection.query("SELECT answer from quizs where quizID='"+quizID+"'")
+    return answer
   }
 
   static async updateGotAnswer(quizID){
     if(!this.connection){
       this.connection = await mysql.createConnection(config)      
     }
-    result= await this.connection.query("UPDATE quizs set gotAnswer ='" +1+"'" +" where quizID='"+ quizID+"'")
+    const [result]= await this.connection.query("UPDATE quizs set gotAnswer ='" +1+"'" +" where quizID='"+ quizID+"'")
     return result
   }
   
@@ -120,7 +120,7 @@ class DBConnector {
     if(!this.connection){
       this.connection = await mysql.createConnection(config)      
     }
-    result= await this.connection.query("insert into winners(quizID,nickname,text,ip,time) VALUES ('"+ winner.quizID + "', '" + winner.nickname + "','"+ winner.text + "', '" + winner.ip+ "', '" + winner.time + "') ")
+    const [result]= await this.connection.query("insert into winners(quizID,nickname,text,ip,time) VALUES ('"+ winner.quizID + "', '" + winner.nickname + "','"+ winner.text + "', '" + winner.ip+ "', '" + winner.time + "') ")
     return result
   }
 
