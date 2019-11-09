@@ -7,7 +7,7 @@ const commentController = require('../controllers/commentController');
 
 // router.get('/:quizID', commentController.getOneQuizComments);
 
-router.post('/:quizID', commentController.create);
+router.post('/', commentController.create);
 
 router.delete('/', commentController.delete);
 
