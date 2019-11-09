@@ -43,7 +43,6 @@ exports.create = async (req, res) => {
     await DBConnector.insertComment(comment)
 
     const comments = await DBConnector.getOneQuiz20Comments(req.body.quizID)  
-    console.log(comments)
     WSConnector.commentsBroadcast(comments)
 
   };
