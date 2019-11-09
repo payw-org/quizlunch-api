@@ -55,7 +55,7 @@ exports.delete = async (req, res) => {
     if(password[0].password==req.body.password)
     {
         await DBConnector.deleteComment(req.body.commentID)
-        const comments = await DBConnector.getOneQuiz20Comments(req.params.quizID)  
+        const comments = await DBConnector.getOneQuiz20Comments(req.body.quizID)  
         WSConnector.commentsBroadcast(comments)
     }
     else 

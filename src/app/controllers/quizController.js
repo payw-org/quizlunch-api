@@ -35,7 +35,7 @@ const WSConnector = require('../websocket/WSConnector');
 
   exports.correctCheck = async (req, res) => {
     
-    const answer = await DBConnector.findAnswer()
+    const answer = await DBConnector.findAnswer(req.params.quizID)
     if(answer[0].answer==req.params.answer)
     {
         console.log('Correct Answer');
