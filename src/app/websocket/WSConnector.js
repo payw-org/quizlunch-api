@@ -28,7 +28,7 @@ module.exports = class WSConnector {
         if(!this.WSS){
             await this.connect()
         }
-
+        console.log(data)
         this.WSS.clients.forEach((client)=>{
             if(client.readyState == WebSocketServer.OPEN){
                 client.send(JSON.stringify({comments:data}))
@@ -40,7 +40,7 @@ module.exports = class WSConnector {
         if(!this.WSS){
             await this.connect()
         }
-
+        console.log(data)
         this.WSS.clients.forEach((client)=>{
             if(client.readyState == WebSocketServer.OPEN){
                 client.send(JSON.stringify({quiz:data}))
