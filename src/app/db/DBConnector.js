@@ -3,138 +3,118 @@ const config = require('../configs/environments');
 
 class DBConnector {
   
+  static async connect(){
+    this.connection = await mysql.createConnection(config) 
+  }
+
   static async getConnection(){
-    if(!this.connection){
-      this.connection = await mysql.createConnection(config)      
-    }
+    if(!this.connection)
+      await this.connect()
 
     return this.connection
   }
   
+  static async getComments(quizID, numOfComments=20){
+    if(!this.connection)
+      await this.connect()
 
-  static async getOneQuiz20Comments(quizID){
-    if(!this.connection){
-      this.connection = await mysql.createConnection(config)      
-    }
-    var [comments]= await this.connection.query("SELECT * from comments where quizID='"+ quizID + "' ORDER BY commentID DESC LIMIT 20")
-    for(var i=0;i<comments.length;i++)
+    var [comments]= await this.connection.query(`SELECT * from comments where quizID='${quizID}' ORDER BY commentID DESC LIMIT ${numOfComments}`)
+    for(var i=0; i<comments.length; i++)
     {
       delete comments[i].password;
-      comments[i].ip=comments[i].ip.substring(0,7)
+      comments[i].ip = comments[i].ip.substring(0,7) + '.***.***'
     }
 
     return comments
   }
-
-  static async getOneQuizAllComments(quizID){
-    if(!this.connection){
-      this.connection = await mysql.createConnection(config)      
-    }
-    var [comments]= await this.connection.query("SELECT * from comments where quizID='"+ quizID + "' ORDER BY commentID DESC")
-    for(var i=0;i<comments.length;i++)
-    {
-      delete comments[i].password;
-      comments[i].ip=comments[i].ip.substring(0,7)
-    }
-    return comments
-  }
-
 
   static async insertNickname(ip, nickname){
-    if(!this.connection){
-      this.connection = await mysql.createConnection(config)      
-    }
-    const [result]= await this.connection.query("insert into nicknames (ip ,nickname) VALUES ('"+ ip + "', '" + nickname + "') ");
+    if(!this.connection)
+      await this.connect()
 
-    return result
+    await this.connection.query(`insert into nicknames (ip ,nickname) VALUES ('${ip}', '${nickname}') `);
   }
 
-  static async findNickname(ip){
-    if(!this.connection){
-      this.connection = await mysql.createConnection(config)      
-    }
-    const [result]= await this.connection.query("SELECT nickname from nicknames where ip='"+ip+"'")
+  static async getNickname(ip){
+    if(!this.connection)
+      await this.connect()
+
+    const [result]= await this.connection.query(`SELECT nickname from nicknames where ip='${ip}'`)
     return result
   }
 
   static async insertComment(comment){
-    if(!this.connection){
-      this.connection = await mysql.createConnection(config)      
-    }
-    const [result]= await this.connection.query("insert into comments (quizID ,nickname, password, text, ip ,time ) VALUES ('"+ comment.quizID + "', '" + comment.nickname + "', '" + comment.password+ "', '" + comment.text+ "', '" + comment.ip+ "', '" + comment.time+ "') ")
-    return result
+    if(!this.connection)
+      await this.connect()
+
+    await this.connection.query(`insert into comments (quizID ,nickname, password, text, ip ,time ) VALUES ('${comment.quizID}', '${comment.nickname}', '${comment.password}', '${comment.text}', '${comment.ip}', '${comment.time}') `)
   }
 
-  static async findPassword(commentID){
-    if(!this.connection){
-      this.connection = await mysql.createConnection(config)      
-    }
-    const [result]= await this.connection.query("SELECT password from comments where commentID='"+commentID+"'")
+  static async getPassword(commentID){
+    if(!this.connection)
+      await this.connect()
+
+    const [result]= await this.connection.query(`SELECT password from comments where commentID='${commentID}'`)
     return result
   }
 
   static async deleteComment(commentID){
-    if(!this.connection){
-      this.connection = await mysql.createConnection(config)      
-    }
-    const [result]= await this.connection.query("DELETE FROM comments WHERE commentID ='"+commentID+"'")
-    return result
+    if(!this.connection)
+      await this.connect()
+
+    await this.connection.query(`DELETE FROM comments WHERE commentID ='${commentID}'`)
   }
 
   static async getLastestQuizID(){
-    if(!this.connection){
-      this.connection = await mysql.createConnection(config)      
-    }
+    if(!this.connection)
+      await this.connect()
+
     var [quizID]= await this.connection.query("SELECT quizID from quizs ORDER BY quizID DESC")
     return quizID[0].quizID
   }
 
 
-  static async getOneQuiz(quizID){
-    if(!this.connection){
-      this.connection = await mysql.createConnection(config)      
-    }
-    var [quiz]= await this.connection.query("SELECT * from quizs where quizID='"+quizID+"'")
+  static async getQuiz(quizID){
+    if(!this.connection)
+      await this.connect()
+
+    var [quiz]= await this.connection.query(`SELECT * from quizs where quizID='${quizID}'`)
     if(quiz[0].gotAnswer==0)
     {
-      delete quiz[0].answer;
-
+      quiz[0].answer = '';
     }
-    return quiz
+
+    return quiz[0]
   }
 
   static async insertQuiz(quiz){
-    if(!this.connection){
-      this.connection = await mysql.createConnection(config)      
-    }
-    const [result]= await this.connection.query("insert into quizs(title,picture,information,answer,time,gotAnswer) VALUES ('"+ quiz.title + "', '" + quiz.picture + "','"+ quiz.information + "', '" + quiz.answer+ "', '" + quiz.time +"', '" + quiz.gotAnswer + "') ")
-    return result
+    if(!this.connection)
+      await this.connect()
+
+    await this.connection.query(`insert into quizs(title,picture,information,answer,time,gotAnswer) VALUES ('${title}', '${picture}','${information}', '${answer}', '${time}', '${gotAnswer}')`)
   }
 
-  static async findAnswer(quizID){
-    if(!this.connection){
-      this.connection = await mysql.createConnection(config)      
-    }
-    const [answer]= await this.connection.query("SELECT answer from quizs where quizID='"+quizID+"'")
-    return answer
+  static async getAnswer(quizID){
+    if(!this.connection)
+      await this.connect()
+
+    const [result]= await this.connection.query(`SELECT answer from quizs where quizID='${quizID}'`)
+    return result[0].answer
   }
 
-  static async updateGotAnswer(quizID){
-    if(!this.connection){
-      this.connection = await mysql.createConnection(config)      
-    }
-    const [result]= await this.connection.query("UPDATE quizs set gotAnswer ='" +1+"'" +" where quizID='"+ quizID+"'")
-    return result
+  static async updateQuizSolved(quizID){
+    if(!this.connection)
+      await this.connect()
+
+    await this.connection.query(`UPDATE quizs set gotAnswer ='1' where quizID='${quizID}'`)
   }
   
   static async insertWinner(winner){
-    if(!this.connection){
-      this.connection = await mysql.createConnection(config)      
-    }
-    const [result]= await this.connection.query("insert into winners(quizID,nickname,text,ip,time) VALUES ('"+ winner.quizID + "', '" + winner.nickname + "','"+ winner.text + "', '" + winner.ip+ "', '" + winner.time + "') ")
-    return result
-  }
+    if(!this.connection)
+      await this.connect()
 
+    await this.connection.query(`insert into winners(quizID,nickname,text,ip,time) VALUES ('${quizID}','${nickname}','${text}','${ip}','${time}') `)
+  }
 }
 
 module.exports = DBConnector
