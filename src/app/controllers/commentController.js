@@ -5,9 +5,9 @@ exports.create = async (req, res) => {
     const axios = require('axios');
 
 
-    var today = new Date().toLocaleString("en-US", {timeZone: "Asia/Seoul"});
-    today = new Date(today);
-    console.log('Asia time: '+today.toLocaleString())
+    const seoul = new Date().toLocaleString("en-US", {timeZone: "Asia/Seoul"});
+    var today = new Date(seoul);
+    console.log(today.toString());
     var date = today.getFullYear()+'-'+(today.getMonth()+1)+'-'+today.getDate();
     var time = today.getHours() + ":" + today.getMinutes() + ":" + today.getSeconds();
     var ip = req.headers['x-forwarded-for'] ||
