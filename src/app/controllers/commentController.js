@@ -4,15 +4,18 @@ const WSConnector = require('../websocket/WSConnector');
 exports.create = async (req, res) => {
     const axios = require('axios');
 
-    var today = new Date();
-    var date = today.getFullYear()+'-'+(today.getMonth()+1)+'-'+today.getDate();
-    var time = today.getHours() + ":" + today.getMinutes() + ":" + today.getSeconds();
+
+    var today = new Date().toLocaleString("en-US", {timeZone: "Asia/Seoul"});
+    today = new Date(today);
+    const date = today.getFullYear()+'-'+(today.getMonth()+1)+'-'+today.getDate();
+    const time = today.getHours() + ":" + today.getMinutes() + ":" + today.getSeconds();
+    const dateTime = date + ' ' + time;
+
     var ip = req.headers['x-forwarded-for'] ||
      req.connection.remoteAddress ||
      req.socket.remoteAddress ||
      req.connection.socket.remoteAddress;
-    var dateTime = date + ' ' + time;
-
+    
     var nickname = await DBConnector.getNickname(ip)
     if(nickname.length==0){
       const result = await axios.get('http://rng.api.quizlunch.com/new');
