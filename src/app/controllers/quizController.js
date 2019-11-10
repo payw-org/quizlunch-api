@@ -40,5 +40,3 @@ const WSConnector = require('../websocket/WSConnector');
   //   const quiz = await DBConnector.getQuiz(req.body.quizID)  
   //   WSConnector.quizBroadcast(quiz)
   // };
-
-  //
