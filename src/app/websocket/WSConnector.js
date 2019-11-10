@@ -10,28 +10,22 @@ module.exports = class WSConnector {
 
     static async defaultData(){
         this.WSS.on("connection", async (ws,req)=>{
-            
-            const latestQuizID = await DBConnector.getLastestQuizID()
             var data = {}
-            var result
-            ;result = await DBConnector.getOneQuiz20Comments(latestQuizID)
-            data.comments = result
+            const latestQuizID = await DBConnector.getLastestQuizID()
+            data.comments = await DBConnector.getComments(latestQuizID)
+            data.quiz = await DBConnector.getQuiz(latestQuizID)
 
-            ;result = await DBConnector.getOneQuiz(latestQuizID)
-
-            data.quiz = result[0]
-            
             ws.send(JSON.stringify(data))
         })
     }
 
-    static async commentsBroadcast(data){
+    static async commentBroadcast(data){
         if(!this.WSS){
             await this.connect()
         }
         this.WSS.clients.forEach((client)=>{
             if(client.readyState == WebSocketServer.OPEN){
-                client.send(JSON.stringify({comments:data}))
+                client.send(JSON.stringify({comment:data}))
             }
         })
     }
@@ -43,7 +37,6 @@ module.exports = class WSConnector {
         this.WSS.clients.forEach((client)=>{
             if(client.readyState == WebSocketServer.OPEN){
                 client.send(JSON.stringify({quiz:data}))
-
             }
         })
     }

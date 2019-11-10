@@ -1,12 +1,6 @@
 const DBConnector = require('../db/DBConnector');
 const WSConnector = require('../websocket/WSConnector');
 
-// exports.getOneQuizComments = async (req, res) => {
-//   const result = DBConnector.getOneQuiz20Comments(req.params.quizID)  
-//   res.send(result)
-// };
-
-  
 exports.create = async (req, res) => {
     const axios = require('axios');
 
@@ -19,44 +13,39 @@ exports.create = async (req, res) => {
      req.connection.socket.remoteAddress;
     var dateTime = date + ' ' + time;
 
-    var nickname = await DBConnector.findNickname(ip)
-    if(nickname.length==0)
-    {
-      const gotAxios = await axios.get('http://rng.api.quizlunch.com/new');
-      nickname = gotAxios.data
-      const newNickNameUpdate = await DBConnector.insertNickname(ip,nickname)
+    var nickname = await DBConnector.getNickname(ip)
+    if(nickname.length==0){
+      const result = await axios.get('http://rng.api.quizlunch.com/new');
+      await DBConnector.insertNickname(ip,nickname)
+      nickname = result.data
     }   
-    else
-    {
-      nickname=nickname[0].nickname
+    else{
+      nickname = nickname[0].nickname
     }
 
     var comment = {
-                'quizID':req.body.quizID,
-                'nickname':nickname,
-                'password':req.body.password,
-                'text':req.body.text,
-                'ip':ip,
-                'time':dateTime 
-            };
- 
+      'quizID':req.body.quizID,
+      'nickname':nickname,
+      'password':req.body.password,
+      'text':req.body.text,
+      'ip':ip,
+      'time':dateTime 
+    }
     await DBConnector.insertComment(comment)
-
-    const comments = await DBConnector.getOneQuiz20Comments(req.body.quizID)  
-    WSConnector.commentsBroadcast(comments)
+    WSConnector.commentBroadcast(comment)
 
   };
 
 
 exports.delete = async (req, res) => {
 
-    const password =  await DBConnector.findPassword(req.body.commentID)
+    const password =  await DBConnector.getPassword(req.body.commentID)
 
     if(password[0].password==req.body.password)
     {
         await DBConnector.deleteComment(req.body.commentID)
-        const comments = await DBConnector.getOneQuiz20Comments(req.body.quizID)  
-        WSConnector.commentsBroadcast(comments)
+        const comments = await DBConnector.getComments(req.body.quizID)  
+        WSConnector.commentBroadcast(comments)
     }
     else 
     {
