@@ -27,9 +27,9 @@ WSConnector.connect()
 
 var money=1000;
 
-setInterval(moneyIncrease(money), 3000);
+setInterval(moneyIncrease, 3000);
 
-function moneyIncrease(money) {
+function moneyIncrease() {
   money=money+1;
   console.log(money)
   WSConnector.moneyBroadcast(money)
