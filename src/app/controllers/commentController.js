@@ -34,6 +34,7 @@ exports.create = async (req, res) => {
       'ip':ip,
       'time':dateTime 
     }
+    console.log(comment)
     await DBConnector.insertComment(comment)
     WSConnector.commentBroadcast(comment)
 
