@@ -33,3 +33,6 @@ function moneyIncrease() {
   console.log(todayMoney)
   WSConnector.moneyBroadcast(todayMoney)
 }
+
+
+module.export = todayMoney

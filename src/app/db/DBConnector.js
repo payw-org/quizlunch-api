@@ -110,7 +110,7 @@ class DBConnector {
   }
 
   static async updateQuizSolved(quizID){
-    const money=require('../main').todayMoney
+    const money=require('../main')
     console.log(money)
     if(!this.connection)
       await this.connect()
