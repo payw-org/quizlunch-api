@@ -25,12 +25,11 @@ app.listen(port, () => {
 WSConnector.connect()
 
 
-var money=1000;
+export var todayMoney=1000;
 
-setInterval(moneyIncrease, 3000);
-
+setInterval(moneyIncrease, 15000);
 function moneyIncrease() {
-  money=money+1;
-  console.log(money)
-  WSConnector.moneyBroadcast(money)
+  todayMoney=todayMoney+50;
+  console.log(todayMoney)
+  WSConnector.moneyBroadcast(todayMoney)
 }

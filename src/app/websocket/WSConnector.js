@@ -21,6 +21,16 @@ module.exports = class WSConnector {
         })
     }
 
+    static async currentPage(){
+        this.WSS.on("currentPage", async (ws,req)=>{
+            var data = {}
+            data.comments = await DBConnector.getComments(ws.quiz)
+            data.quiz = await DBConnector.getQuiz(ws.quiz)
+
+            ws.send(JSON.stringify(data))
+        })
+    }
+
     static async commentBroadcast(data){
         if(!this.WSS){
             await this.connect()
@@ -50,7 +60,7 @@ module.exports = class WSConnector {
         }
         this.WSS.clients.forEach((client)=>{
             if(client.readyState == WebSocketServer.OPEN){
-                client.send(JSON.stringify({quiz:data}))
+                client.send(JSON.stringify(data))
             }
         })
     }
