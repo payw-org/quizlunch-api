@@ -29,7 +29,7 @@ var money=1000;
 
 setInterval(moneyIncrease(money), 3000);
 
-static function moneyIncrease(money) {
+function moneyIncrease(money) {
   money=money+1;
   console.log(money)
   WSConnector.moneyBroadcast(money)
