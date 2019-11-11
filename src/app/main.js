@@ -25,7 +25,7 @@ app.listen(port, () => {
 WSConnector.connect()
 
 
-static var money=1000;
+var money=1000;
 
 setInterval(moneyIncrease(money), 3000);
 
