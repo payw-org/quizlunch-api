@@ -35,6 +35,13 @@ class DBConnector {
     await this.connection.query(`insert into nicknames (ip ,nickname) VALUES ('${ip}', '${nickname}') `);
   }
 
+  static async updateNickname(ip, nickname){
+    if(!this.connection)
+      await this.connect()
+
+      await this.connection.query(`UPDATE nicknames set nickname ='${nickname}' where ip='${ip}'`)
+    }
+
   static async getNickname(ip){
     if(!this.connection)
       await this.connect()

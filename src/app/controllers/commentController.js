@@ -22,6 +22,11 @@ exports.create = async (req, res) => {
       await DBConnector.insertNickname(ip,nickname)
       nickname = result.data
     }   
+    else if(nickname[0].nickname==""){
+      const result = await axios.get('http://rng.api.quizlunch.com/new');
+      await DBConnector.updateNickname(ip,nickname)
+      nickname = result.data
+    }
     else{
       nickname = nickname[0].nickname
     }
