@@ -20,18 +20,17 @@ exports.create = async (req, res) => {
     if(nickname.length==0){
       const result = await axios.get('http://rng.api.quizlunch.com/new');
       console.log("new Nick")
-      console.log(result)
       await DBConnector.insertNickname(ip,nickname)
       nickname = result.data
     }   
     else if(nickname[0].nickname==""){
       const result = await axios.get('http://rng.api.quizlunch.com/new');
       console.log("update Nick")
-      console.log(result)
       await DBConnector.updateNickname(ip,nickname)
       nickname = result.data
     }
     else{
+      console.log(nickname)
       nickname = nickname[0].nickname
     }
 
@@ -43,7 +42,6 @@ exports.create = async (req, res) => {
       'ip':ip,
       'time':dateTime 
     }
-    console.log(comment)
     await DBConnector.insertComment(comment)
     WSConnector.commentBroadcast(comment)
 
