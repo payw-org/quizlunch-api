@@ -16,6 +16,9 @@ module.exports = class WSConnector {
             data.quiz = await DBConnector.getQuiz(latestQuizID)
 
             ws.send(JSON.stringify(data))
+            const bugFix = setInterval(()=>{
+                ws.send(JSON.stringify({}))
+            },2000)
         })
     }
 
