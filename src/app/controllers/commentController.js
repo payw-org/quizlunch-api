@@ -16,8 +16,8 @@ exports.create = async (req, res) => {
     var nickname = await DBConnector.getNickname(ip)
     if(nickname.length==0){
       const result = await axios.get('http://rng.api.quizlunch.com/new');
-      await DBConnector.insertNickname(ip,nickname)
       nickname = result.data
+      await DBConnector.insertNickname(ip,nickname)
     }   
     else{
       nickname = nickname[0].nickname
@@ -33,7 +33,7 @@ exports.create = async (req, res) => {
     }
     await DBConnector.insertComment(comment)
     WSConnector.commentBroadcast(comment)
-
+    res.send(200)
   };
 
 
