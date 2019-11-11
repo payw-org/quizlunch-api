@@ -3,6 +3,8 @@ const DBConnector = require('../db/DBConnector');
 
 module.exports = class WSConnector {
 
+     
+
     static async connect(){
         this.WSS = new WebSocketServer.Server({port: 3250})
         await this.defaultData()
@@ -40,4 +42,18 @@ module.exports = class WSConnector {
             }
         })
     }
+
+
+    static async moneyBroadcast(data){
+        if(!this.WSS){
+            await this.connect()
+        }
+        this.WSS.clients.forEach((client)=>{
+            if(client.readyState == WebSocketServer.OPEN){
+                client.send(JSON.stringify({quiz:data}))
+            }
+        })
+    }
+
+
 }
