@@ -35,4 +35,4 @@ function moneyIncrease() {
 }
 
 
-module.export = todayMoney
+module.exports = todayMoney
