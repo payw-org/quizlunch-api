@@ -114,8 +114,7 @@ class DBConnector {
     console.log(money)
     if(!this.connection)
       await this.connect()
-
-    await this.connection.query(`UPDATE quizs set gotAnswer ='1' and money='${money}' where quizID='${quizID}'`)
+    await this.connection.query(`UPDATE quizs set gotAnswer ='1' , money='${money}' where quizID='${quizID}'`)
   }
   
   static async insertWinner(winner){
