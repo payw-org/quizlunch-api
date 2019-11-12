@@ -25,6 +25,7 @@ app.listen(port, () => {
 })
 
 WSConnector.connect()
+
 MoneyManager.getMoney()
 
 
