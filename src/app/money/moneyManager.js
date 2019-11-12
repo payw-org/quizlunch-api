@@ -19,8 +19,8 @@ module.exports =  class MoneyManager {
       const time = today.getHours() + ":" + today.getMinutes() + ":" + today.getSeconds();
       const dateTime = date + ' ' + time;
 
-      console(dateTime)
-      console(quizTime)
+      console.log(dateTime)
+      console.log(quizTime)
       var timeMoney=(dateTime.substring(11,12) * 60  + dateTime.substring(14,15) * 1 ) - (quizTime.substring(11,12) * 60  + quizTime.substring(14,15)*1)
       console.log(timeMoney)
       if(timeMoney<0)
