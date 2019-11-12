@@ -9,8 +9,7 @@ class MoneyManager {
     const quizID = await DBConnector.getLastestQuizID()
     const quizTime = await DBConnector.getQuiz(quizID)[0].dateTime
 
-    setInterval(moneyIncrease, 15000);
-    function moneyIncrease() {
+    setInterval(function(){
 
       var today = new Date().toLocaleString("en-US", {timeZone: "Asia/Seoul"});
       today = new Date(today);
@@ -26,7 +25,8 @@ class MoneyManager {
       nowMoney=defaultMoney+timeMoney
       console.log(nowMoney)
       WSConnector.moneyBroadcast(nowMoney)
-    }
+    }, 15000);
+    // moneyIncrease() 
     return nowMoney;
   }
 
