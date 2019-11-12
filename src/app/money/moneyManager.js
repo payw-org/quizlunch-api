@@ -7,7 +7,7 @@ module.exports =  class MoneyManager {
     const defaultMoney=1000;
     var nowMoney;
     const quizID = await DBConnector.getLastestQuizID()
-    const quizTime = await DBConnector.getQuiz(quizID)[0].dateTime
+    const quizTime = await DBConnector.getQuiz(quizID)[0].time
 
     setInterval(updateMoney, 15000);
     function updateMoney() {
