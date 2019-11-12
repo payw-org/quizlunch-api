@@ -1,5 +1,7 @@
 const mysql = require('mysql2/promise');
 const config = require('../configs/environments');
+const MoneyManager = require('../money/moneyManager')
+
 
 class DBConnector {
   
@@ -110,7 +112,7 @@ class DBConnector {
   }
 
   static async updateQuizSolved(quizID){
-    const money=require('../main')
+    var money=MoneyManager.getMoney()
     console.log(money)
     if(!this.connection)
       await this.connect()

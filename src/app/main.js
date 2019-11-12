@@ -3,6 +3,8 @@ const express = require('express');
 const app = express();
 const bodyParser = require('body-parser')
 const WSConnector = require('./websocket/WSConnector')
+const MoneyManager = require('./money/moneyManager')
+
 const port = 3200;
 
 // solve cors problem
@@ -23,16 +25,6 @@ app.listen(port, () => {
 })
 
 WSConnector.connect()
+MoneyManager.getMoney()
 
 
-var todayMoney=1000;
-
-setInterval(moneyIncrease, 15000);
-function moneyIncrease() {
-  todayMoney=todayMoney+50;
-  console.log(todayMoney)
-  WSConnector.moneyBroadcast(todayMoney)
-}
-
-
-module.exports = todayMoney

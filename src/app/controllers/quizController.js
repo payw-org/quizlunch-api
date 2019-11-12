@@ -3,10 +3,11 @@ const WSConnector = require('../websocket/WSConnector');
 
   exports.createQuiz = async (req, res) => {
     
-    var today = new Date();
-    var date = today.getFullYear()+'-'+(today.getMonth()+1)+'-'+today.getDate();
-    var time = today.getHours() + ":" + today.getMinutes() + ":" + today.getSeconds();
-    var dateTime = date + ' ' + time;
+    var today = new Date().toLocaleString("en-US", {timeZone: "Asia/Seoul"});
+    today = new Date(today);
+    const date = today.getFullYear()+'-'+(today.getMonth()+1)+'-'+today.getDate();
+    const time = today.getHours() + ":" + today.getMinutes() + ":" + today.getSeconds();
+    const dateTime = date + ' ' + time;
 
     var quiz = {
                 'title':req.body.title,
