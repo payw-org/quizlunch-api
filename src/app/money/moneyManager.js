@@ -27,7 +27,7 @@ class MoneyManager {
     //   console.log(nowMoney)
     //   WSConnector.moneyBroadcast(nowMoney)
     }
-  }
+  // }
 
   
 }
