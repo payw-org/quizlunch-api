@@ -26,9 +26,20 @@ module.exports = class WSConnector {
             ws.on("message",async event=>{
                 if(event.aa){
                     //request current page
+                    var curQuizID=ws.quizID
+                    if(left)//left page
+                    {
+                        curQuizID = await DBConnector.getLeftQuizID(curQuizID)
+                    }
+                    else if(right)//right page
+                    {
+                        curQuizID = await DBConnector.getRightQuizID(curQuizID)
+                    }
+                    
+
                     var data = {}
-                    data.comments = await DBConnector.getComments(ws.quiz)
-                    data.quiz = await DBConnector.getQuiz(ws.quiz)
+                    data.comments = await DBConnector.getComments(curQuizID)
+                    data.quiz = await DBConnector.getQuiz(curQuizID)
 
                     ws.send(JSON.stringify(data))
                 }

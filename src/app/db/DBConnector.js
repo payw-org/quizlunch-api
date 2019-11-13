@@ -81,6 +81,30 @@ class DBConnector {
     return quizID[0].quizID
   }
 
+  static async getLeftQuizID(curQuizID){
+    if(!this.connection)
+      await this.connect()
+
+    const [quizID]= await this.connection.query(`SELECT quizID from quizs WHERE quizID <' ${curQuizID}' ORDER BY quizID DESC`)
+    if(quizID.length==0)
+    {
+      return curQuizID
+    }
+    return quizID[0].quizID
+  }
+
+  static async getRightQuizID(curQuizID){
+    if(!this.connection)
+      await this.connect()
+
+    const [quizID]= await this.connection.query(`SELECT quizID from quizs WHERE quizID >' ${curQuizID}' ORDER BY quizID ASC`)
+    if(quizID.length==0)
+    {
+      return curQuizID
+    }
+    return quizID[0].quizID
+  }
+
 
   static async getQuiz(quizID){
     if(!this.connection)
