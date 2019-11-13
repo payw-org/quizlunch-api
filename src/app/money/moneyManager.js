@@ -16,7 +16,7 @@ module.exports =  class MoneyManager {
       var nowTime = new Date().toLocaleString("en-US", {timeZone: "Asia/Seoul"});
       nowTime = new Date(nowTime);
       // var timeMoney=((nowTime.getHours() * 60  + nowTime.getMinutes() * 1 ) - (quizTime.getHours() * 60  + quizTime.getMinutes()*1))*2
-      var timeMoney=((nowTime.getMinutes() * 60  + nowTime.getSeconds() * 1 ) - (quizTime.getMinutes() * 60  + quizTime.getSeconds()*1))*1
+      var timeMoney=((nowTime.getHours() * 3600 +nowTime.getMinutes() * 60  + nowTime.getSeconds() * 1 ) - (quizTime.getHours()* 3600 +quizTime.getMinutes() * 60  + quizTime.getSeconds()*1))*1
 
       if(timeMoney<0)
       {
