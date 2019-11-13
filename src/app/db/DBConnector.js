@@ -115,7 +115,7 @@ class DBConnector {
     var nowMoney;
     const result = await DBConnector.getQuiz(quizID)
     const quizTime = new Date(result.time)
-    const nowTime = new Date().toLocaleString("en-US", {timeZone: "Asia/Seoul"});
+    var nowTime = new Date().toLocaleString("en-US", {timeZone: "Asia/Seoul"});
     nowTime = new Date(nowTime);
 
     const timeMoney=(nowTime.getHours() * 60  + nowTime.getMinutes() * 1 ) - (quizTime.getHours() * 60  + quizTime.getMinutes()*1)*2
