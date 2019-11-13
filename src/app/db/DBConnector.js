@@ -99,7 +99,7 @@ class DBConnector {
     if(!this.connection)
       await this.connect()
 
-    await this.connection.query(`insert into quizs(title,picture,information,answer,time,gotAnswer) VALUES ('${title}', '${picture}','${information}', '${answer}', '${time}', '${gotAnswer}')`)
+    await this.connection.query(`insert into quizs(money,title,picture,information,answer,time,gotAnswer) VALUES ('${money}', '${title}', '${picture}','${information}', '${answer}', '${time}', '${gotAnswer}')`)
   }
 
   static async getAnswer(quizID){

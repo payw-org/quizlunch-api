@@ -10,12 +10,14 @@ const WSConnector = require('../websocket/WSConnector');
     const dateTime = date + ' ' + time;
 
     var quiz = {
+                'money':0,
                 'title':req.body.title,
                 'picture':req.body.picture,
                 'information':req.body.information,
                 'answer':req.body.answer,
                 'time':dateTime,
                 'gotAnswer': 0
+
             };
 
     await DBConnector.insertQuiz(quiz)
