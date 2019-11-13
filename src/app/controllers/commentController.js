@@ -36,6 +36,7 @@ exports.create = async (req, res) => {
     }
     await DBConnector.insertComment(comment)
     WSConnector.commentBroadcast(comment)
+    res.send(200)
   };
 
 

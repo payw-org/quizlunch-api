@@ -30,6 +30,9 @@ module.exports = class WSConnector {
             //     }
 
             // })
+            const bugFix = setInterval(()=>{
+                ws.send(JSON.stringify({}))
+            },2000)
         })
     }
 
