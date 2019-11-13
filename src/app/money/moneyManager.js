@@ -8,12 +8,12 @@ module.exports =  class MoneyManager {
     var nowMoney;
     const quizID = await DBConnector.getLastestQuizID()
     const result = await DBConnector.getQuiz(quizID)
-    console.log(result)
+    console.log(result.time)
 
     setInterval(updateMoney, 15000);
     function updateMoney() {
 
-      var quizTime = new Date(result)
+      var quizTime = new Date(result.time)
       var nowTime = new Date().toLocaleString("en-US", {timeZone: "Asia/Seoul"});
       nowTime = new Date(nowTime);
 
