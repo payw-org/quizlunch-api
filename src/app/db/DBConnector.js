@@ -20,7 +20,7 @@ class DBConnector {
       await this.connect()
 
     var [comments]= await this.connection.query(`SELECT * from comments where quizID='${quizID}' ORDER BY commentID DESC LIMIT ${numOfComments}`)
-    for(var i=0; i<comments.length; i++)
+    for(var i=0; i<comments.length; i++)//hide IP and password
     {
       delete comments[i].password;
       comments[i].ip = comments[i].ip.substring(0,7) + '.***.***'
