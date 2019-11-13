@@ -1,6 +1,5 @@
 const mysql = require('mysql2/promise');
 const config = require('../configs/environments');
-// const MoneyManager = require('../money/moneyManager')
 
 
 class DBConnector {
@@ -112,12 +111,23 @@ class DBConnector {
   }
 
   static async updateQuizSolved(quizID){
-    var money=0
-    // var money=MoneyManager.getMoney()
-    console.log(money)
+    const defaultMoney=1000;
+    var nowMoney;
+    const result = await DBConnector.getQuiz(quizID)
+    const quizTime = new Date(result.time)
+    const nowTime = new Date().toLocaleString("en-US", {timeZone: "Asia/Seoul"});
+    nowTime = new Date(nowTime);
+
+    const timeMoney=(nowTime.getHours() * 60  + nowTime.getMinutes() * 1 ) - (quizTime.getHours() * 60  + quizTime.getMinutes()*1)*2
+    if(timeMoney<0)
+    {
+      timeMoney=0
+    }
+    nowMoney=defaultMoney+timeMoney
+
     if(!this.connection)
       await this.connect()
-    await this.connection.query(`UPDATE quizs set gotAnswer ='1' , money='${money}' where quizID='${quizID}'`)
+    await this.connection.query(`UPDATE quizs set gotAnswer ='1' , money='${nowMoney}' where quizID='${quizID}'`)
   }
   
   static async insertWinner(winner){
