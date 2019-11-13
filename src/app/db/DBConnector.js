@@ -112,7 +112,8 @@ class DBConnector {
   }
 
   static async updateQuizSolved(quizID){
-    var money=MoneyManager.getMoney()
+    var money=0
+    // var money=MoneyManager.getMoney()
     console.log(money)
     if(!this.connection)
       await this.connect()
