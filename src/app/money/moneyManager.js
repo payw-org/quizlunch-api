@@ -24,6 +24,7 @@ module.exports =  class MoneyManager {
       nowMoney=defaultMoney+timeMoney
       WSConnector.moneyBroadcast(nowMoney)
     }
+    return nowMoney
   }
 
   
