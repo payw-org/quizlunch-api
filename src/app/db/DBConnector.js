@@ -1,6 +1,7 @@
 const mysql = require('mysql2/promise');
 const config = require('../configs/environments');
 
+
 class DBConnector {
   
   static async connect(){
@@ -34,6 +35,13 @@ class DBConnector {
 
     await this.connection.query(`insert into nicknames (ip ,nickname) VALUES ('${ip}', '${nickname}') `);
   }
+
+  static async updateNickname(ip, nickname){
+    if(!this.connection)
+      await this.connect()
+
+      await this.connection.query(`UPDATE nicknames set nickname ='${nickname}' where ip='${ip}'`)
+    }
 
   static async getNickname(ip){
     if(!this.connection)
@@ -91,7 +99,7 @@ class DBConnector {
     if(!this.connection)
       await this.connect()
 
-    await this.connection.query(`insert into quizs(title,picture,information,answer,time,gotAnswer) VALUES ('${title}', '${picture}','${information}', '${answer}', '${time}', '${gotAnswer}')`)
+    await this.connection.query(`insert into quizs(money,title,picture,information,answer,time,gotAnswer) VALUES ('${money}', '${title}', '${picture}','${information}', '${answer}', '${time}', '${gotAnswer}')`)
   }
 
   static async getAnswer(quizID){
@@ -103,10 +111,22 @@ class DBConnector {
   }
 
   static async updateQuizSolved(quizID){
+
     if(!this.connection)
       await this.connect()
 
-    await this.connection.query(`UPDATE quizs set gotAnswer ='1' where quizID='${quizID}'`)
+    const defaultMoney=1000;
+    const result = await DBConnector.getQuiz(quizID)
+    const quizTime = new Date(result.time)
+    var nowTime = new Date().toLocaleString("en-US", {timeZone: "Asia/Seoul"});
+    nowTime = new Date(nowTime);
+    var timeMoney=((nowTime.getHours() * 60  + nowTime.getMinutes() * 1 ) - (quizTime.getHours() * 60  + quizTime.getMinutes()*1))*2
+    if(timeMoney<0)
+    {
+      timeMoney=0
+    }
+    var nowMoney=defaultMoney+timeMoney
+    await this.connection.query(`UPDATE quizs set gotAnswer ='1' , money='${nowMoney}' where quizID='${quizID}'`)
   }
   
   static async insertWinner(winner){
