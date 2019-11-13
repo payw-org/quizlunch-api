@@ -116,24 +116,16 @@ class DBConnector {
       await this.connect()
 
     const defaultMoney=1000;
-    var nowMoney;
     const result = await DBConnector.getQuiz(quizID)
     const quizTime = new Date(result.time)
     var nowTime = new Date().toLocaleString("en-US", {timeZone: "Asia/Seoul"});
     nowTime = new Date(nowTime);
-
-    console.log(nowTime)
-    console.log(quizTime)
-
-    var timeMoney=(nowTime.getHours() * 60  + nowTime.getMinutes() * 1 ) - (quizTime.getHours() * 60  + quizTime.getMinutes()*1)*2
-    console.log(timeMoney)
-
+    var timeMoney=((nowTime.getHours() * 60  + nowTime.getMinutes() * 1 ) - (quizTime.getHours() * 60  + quizTime.getMinutes()*1))*2
     if(timeMoney<0)
     {
       timeMoney=0
     }
-    nowMoney=defaultMoney+timeMoney
-    console.log(nowMoney)
+    var nowMoney=defaultMoney+timeMoney
     await this.connection.query(`UPDATE quizs set gotAnswer ='1' , money='${nowMoney}' where quizID='${quizID}'`)
   }
   

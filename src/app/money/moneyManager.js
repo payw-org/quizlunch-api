@@ -15,18 +15,12 @@ module.exports =  class MoneyManager {
 
       var nowTime = new Date().toLocaleString("en-US", {timeZone: "Asia/Seoul"});
       nowTime = new Date(nowTime);
-      console.log(nowTime.getHours())
-      console.log(quizTime.getHours())
-
-      var timeMoney=(nowTime.getHours() * 60  + nowTime.getMinutes() * 1 ) - (quizTime.getHours() * 60  + quizTime.getMinutes()*1)*2
-      console.log(timeMoney)
+      var timeMoney=((nowTime.getHours() * 60  + nowTime.getMinutes() * 1 ) - (quizTime.getHours() * 60  + quizTime.getMinutes()*1))*2
       if(timeMoney<0)
       {
         timeMoney=0
       }
       nowMoney=defaultMoney+timeMoney
-      console.log(nowMoney)
-
       WSConnector.moneyBroadcast(nowMoney)
     }
   }
