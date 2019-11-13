@@ -23,7 +23,7 @@ module.exports = class WSConnector {
                 ws.send(JSON.stringify({}))
             },2000)
 
-            ws.on("message",event=>{
+            ws.on("message",async event=>{
                 if(event.aa){
                     //request current page
                     var data = {}
