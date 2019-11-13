@@ -19,20 +19,22 @@ module.exports = class WSConnector {
 
             ws.send(JSON.stringify(data))
 
-            // ws.on("message",event=>{
-            //     if(event.aa){
-            //         //request current page
-            //         var data = {}
-            //         data.comments = await DBConnector.getComments(ws.quiz)
-            //         data.quiz = await DBConnector.getQuiz(ws.quiz)
-
-            //         ws.send(JSON.stringify(data))
-            //     }
-
-            // })
             const bugFix = setInterval(()=>{
                 ws.send(JSON.stringify({}))
             },2000)
+
+            ws.on("message",event=>{
+                if(event.aa){
+                    //request current page
+                    var data = {}
+                    data.comments = await DBConnector.getComments(ws.quiz)
+                    data.quiz = await DBConnector.getQuiz(ws.quiz)
+
+                    ws.send(JSON.stringify(data))
+                }
+
+            })
+
         })
     }
 
