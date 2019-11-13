@@ -7,21 +7,19 @@ module.exports =  class MoneyManager {
     const defaultMoney=1000;
     var nowMoney;
     const quizID = await DBConnector.getLastestQuizID()
-    const result = await DBConnector.getQuiz(quizID)
-    const quizTime = result.time
+    const result = await DBConnector.getQuiz(quizID).time
 
     setInterval(updateMoney, 15000);
     function updateMoney() {
 
-      var today = new Date().toLocaleString("en-US", {timeZone: "Asia/Seoul"});
-      today = new Date(today);
-      const date = today.getFullYear()+'-'+(today.getMonth()+1)+'-'+today.getDate();
-      const time = today.getHours() + ":" + today.getMinutes() + ":" + today.getSeconds();
-      const dateTime = date + ' ' + time;
+      var quizTime = new Date(result)
+      var nowTime = new Date().toLocaleString("en-US", {timeZone: "Asia/Seoul"});
+      nowTime = new Date(nowTime);
 
-      console.log(dateTime)
+
       console.log(quizTime)
-      var timeMoney=(dateTime.substring(11,12) * 60  + dateTime.substring(14,15) * 1 ) - (quizTime.substring(11,12) * 60  + quizTime.substring(14,15)*1)
+      console.log(nowTime)
+      var timeMoney=(nowTime.getHours() * 60  + nowTime.getMinutes() * 1 ) - (quizTime.getHours() * 60  + quizTime.getMinutes()*1)
       console.log(timeMoney)
       if(timeMoney<0)
       {
