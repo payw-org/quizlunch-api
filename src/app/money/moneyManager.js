@@ -4,10 +4,11 @@ const WSConnector = require('../websocket/WSConnector');
 module.exports =  class MoneyManager {
 
 
-  static async getQuiz()
+  static async isItSolved()
   {
-    const quiz = await DBConnector.getLatestQuiz()
-    return quiz
+    const result = await DBConnector.getLatestQuiz()
+    var gotAnswer = result.gotAnswer
+    return gotAnswer
   }
 
   static async getLatestQuizTime()
@@ -30,8 +31,7 @@ module.exports =  class MoneyManager {
     setInterval(updateMoney, 6000);
     function updateMoney() {
 
-      var lastestQuiz = this.getQuiz()
-      if(lastestQuiz.gotAnswer==0)// If no one send correct answer
+      if(this.isItSolved()==0)// If no one send correct answer
       {
         var quizTime = this.getLatestQuizTime()
         var nowTime = this.getNowTime()
