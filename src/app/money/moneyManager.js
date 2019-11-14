@@ -7,26 +7,26 @@ module.exports =  class MoneyManager {
   // static async isItSolved()
   // {
   //   const result = await DBConnector.getLatestQuiz()
-  //   var gotAnswer = result.gotAnswer
-  //   return gotAnswer
+  // //   var gotAnswer = result.gotAnswer
+  // //   return gotAnswer
+  // // }
+
+  // static async getLatestQuizTime()
+  // {
+    
   // }
 
-  static async getLatestQuizTime()
-  {
+  // static async getNowTime()
+  // {
     
-  }
-
-  static async getNowTime()
-  {
-    
-    return nowTime;
-  }
+  //   return nowTime;
+  // }
   
   
   static async getMoney(){
     const defaultMoney=1000;
     setInterval(updateMoney, 6000);
-    function updateMoney() {
+    async function updateMoney() {
 
       var quiz = await DBConnector.getLatestQuiz()
       if(quiz.gotAnswer==0)// If no one send correct answer
