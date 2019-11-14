@@ -31,8 +31,8 @@ module.exports =  class MoneyManager {
     setInterval(updateMoney, 6000);
     function updateMoney() {
 
-      if(this.isItSolved()==0)// If no one send correct answer
-      {
+      // if(this.isItSolved()==0)// If no one send correct answer
+      // {
         var quizTime = this.getLatestQuizTime()
         var nowTime = this.getNowTime()
         var timeMoney=0;
@@ -48,7 +48,7 @@ module.exports =  class MoneyManager {
         var nowMoney=defaultMoney+timeMoney
         console.log(nowMoney)
         WSConnector.moneyBroadcast(nowMoney)
-      }
+      // }
       
     }
   }
