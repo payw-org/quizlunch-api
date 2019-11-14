@@ -4,24 +4,21 @@ const WSConnector = require('../websocket/WSConnector');
 module.exports =  class MoneyManager {
 
 
-  static async isItSolved()
-  {
-    const result = await DBConnector.getLatestQuiz()
-    var gotAnswer = result.gotAnswer
-    return gotAnswer
-  }
+  // static async isItSolved()
+  // {
+  //   const result = await DBConnector.getLatestQuiz()
+  //   var gotAnswer = result.gotAnswer
+  //   return gotAnswer
+  // }
 
   static async getLatestQuizTime()
   {
-    const result = await DBConnector.getLatestQuiz()
-    var quizTime = new Date(result.time)
-    return quizTime
+    
   }
 
   static async getNowTime()
   {
-    var nowTime = new Date().toLocaleString("en-US", {timeZone: "Asia/Seoul"});
-    nowTime = new Date(nowTime);
+    
     return nowTime;
   }
   
@@ -31,11 +28,13 @@ module.exports =  class MoneyManager {
     setInterval(updateMoney, 6000);
     function updateMoney() {
 
-      // if(this.isItSolved()==0)// If no one send correct answer
-      // {
-        var quizTime = this.getLatestQuizTime()
-        var nowTime = this.getNowTime()
-        var timeMoney=0;
+      var quiz = await DBConnector.getLatestQuiz()
+      if(quiz.gotAnswer==0)// If no one send correct answer
+      { 
+        var quizTime = new Date(quiz.time)
+        var nowTime = new Date().toLocaleString("en-US", {timeZone: "Asia/Seoul"});
+        nowTime = new Date(nowTime);
+        var timeMoney=0
         if(nowTime.getDate()!=quizTime.getDate())
         {
           timeMoney=60*24
@@ -48,7 +47,7 @@ module.exports =  class MoneyManager {
         var nowMoney=defaultMoney+timeMoney
         console.log(nowMoney)
         WSConnector.moneyBroadcast(nowMoney)
-      // }
+      }
       
     }
   }
