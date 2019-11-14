@@ -1,6 +1,5 @@
 const mysql = require('mysql2/promise');
 const config = require('../configs/environments');
-// const MoneyManager = require("../money/moneyManager")
 
 class DBConnector {
   
@@ -169,7 +168,6 @@ class DBConnector {
   static async insertWinner(winner){
     if(!this.connection)
       await this.connect()
-
     await this.connection.query(`insert into winners(quizID,money,nickname,text,ip,time) VALUES ('${winner.quizID}','${winner.money}','${winner.nickname}','${winner.text}','${winner.ip}','${winner.time}') `)
   }
 }

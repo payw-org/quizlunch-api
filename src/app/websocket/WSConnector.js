@@ -23,34 +23,6 @@ module.exports = class WSConnector {
                 ws.send(JSON.stringify({}))
             },2000)
 
-            // ws.on("message",async (message)=>{
-            //     message = JSON.parse(message);
-
-            //     switch(message.event){
-
-            //         case 'leftPage'://get Left Page
-            //             var curQuizID=message.data.quizID
-            //             curQuizID = await DBConnector.getLeftQuizID(curQuizID)
-            //             var data = {}
-            //             data.comments = await DBConnector.getComments(curQuizID)
-            //             data.quiz = await DBConnector.getQuiz(curQuizID)
-            //             ws.send(JSON.stringify(data))
-            //             break;
-            //         case 'rightPage'://get Right Page
-            //             var curQuizID=message.data.quizID
-            //             curQuizID = await DBConnector.getRightQuizID(curQuizID)
-            //             var data = {}
-            //             data.comments = await DBConnector.getComments(curQuizID)
-            //             data.quiz = await DBConnector.getQuiz(curQuizID)
-            //             ws.send(JSON.stringify(data))
-            //             break;
-            //         default:
-            //     }
-
-
-            // })
-        
-
         })
     }
 
@@ -76,7 +48,6 @@ module.exports = class WSConnector {
         })
     }
 
-
     static async moneyBroadcast(money){
         if(!this.WSS){
             await this.connect()
@@ -89,6 +60,5 @@ module.exports = class WSConnector {
             }
         })
     }
-
 
 }
