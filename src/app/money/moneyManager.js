@@ -82,7 +82,7 @@ module.exports =  class MoneyManager {
           timeMoney=0
         }
         var nowMoney=defaultMoney+timeMoney
-        console.log(nowMoney)
+        // console.log(nowMoney)
         WSConnector.moneyBroadcast(nowMoney)
       }
       
