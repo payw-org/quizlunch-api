@@ -6,7 +6,7 @@ module.exports =  class MoneyManager {
 
   static async isItSolved()
   {
-    const result = await DBConnector.getLatestQuiz()
+    var result = await DBConnector.getLatestQuiz()
     var gotAnswer = result.gotAnswer
     return gotAnswer
   }
