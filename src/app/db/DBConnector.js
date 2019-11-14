@@ -131,7 +131,7 @@ class DBConnector {
     if(!this.connection)
       await this.connect()
 
-    await this.connection.query(`insert into quizs(money,title,picture,information,answer,time,gotAnswer) VALUES ('${money}', '${title}', '${picture}','${information}', '${answer}', '${time}', '${gotAnswer}')`)
+    await this.connection.query(`insert into quizs(money,title,picture,information,answer,time,gotAnswer) VALUES ('${quiz.money}', '${quiz.title}', '${quiz.picture}','${quiz.information}', '${quiz.answer}', '${quiz.time}', '${quiz.gotAnswer}')`)
   }
 
   static async getAnswer(quizID){
@@ -170,7 +170,7 @@ class DBConnector {
     if(!this.connection)
       await this.connect()
 
-    await this.connection.query(`insert into winners(quizID,nickname,text,ip,time) VALUES ('${quizID}','${nickname}','${text}','${ip}','${time}') `)
+    await this.connection.query(`insert into winners(quizID,money,nickname,text,ip,time) VALUES ('${winner.quizID}','${winner.money}','${winner.nickname}','${winner.text}','${winner.ip}','${winner.time}') `)
   }
 }
 
