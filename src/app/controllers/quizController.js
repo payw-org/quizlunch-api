@@ -1,6 +1,22 @@
 const DBConnector = require('../db/DBConnector');
 const WSConnector = require('../websocket/WSConnector');
 
+exports.getLeftPage = async (req, res) => {
+  const curQuizID = await DBConnector.getLeftQuizID(req.params.quizID)
+  const curQuiz = await DBConnector.getQuiz(curQuizID)
+  const curComments = await DBConnector.getQuiz(curQuizID)
+  WSConnector.quizBroadcast(curQuiz)
+  WSConnector.commentBroadcast(curComments)
+};
+
+exports.getRightPage = async (req, res) => {
+  const curQuizID = await DBConnector.getRightQuizID(req.params.quizID)
+  const curQuiz = await DBConnector.getQuiz(curQuizID)
+  const curComments = await DBConnector.getQuiz(curQuizID)
+  WSConnector.quizBroadcast(curQuiz)
+  WSConnector.commentBroadcast(curComments)
+};
+
   exports.createQuiz = async (req, res) => {
     
     var today = new Date().toLocaleString("en-US", {timeZone: "Asia/Seoul"});
@@ -36,6 +52,9 @@ const WSConnector = require('../websocket/WSConnector');
       res.send("wrong")
     }
   };
+
+
+  
 
   // exports.updateAnswer = async (req, res) => {
 

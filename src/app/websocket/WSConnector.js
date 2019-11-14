@@ -13,7 +13,7 @@ module.exports = class WSConnector {
     static async defaultData(){
         this.WSS.on("connection", async (ws,req)=>{
             var data = {}
-            const latestQuizID = await DBConnector.getLastestQuizID()
+            const latestQuizID = await DBConnector.getLatestQuizID()
             data.comments = await DBConnector.getComments(latestQuizID)
             data.quiz = await DBConnector.getQuiz(latestQuizID)
 
@@ -23,32 +23,32 @@ module.exports = class WSConnector {
                 ws.send(JSON.stringify({}))
             },2000)
 
-            ws.on("message",async (message)=>{
-                message = JSON.parse(message);
+            // ws.on("message",async (message)=>{
+            //     message = JSON.parse(message);
 
-                switch(message.event){
+            //     switch(message.event){
 
-                    case 'leftPage'://get Left Page
-                        var curQuizID=message.data.quizID
-                        curQuizID = await DBConnector.getLeftQuizID(curQuizID)
-                        var data = {}
-                        data.comments = await DBConnector.getComments(curQuizID)
-                        data.quiz = await DBConnector.getQuiz(curQuizID)
-                        ws.send(JSON.stringify(data))
-                        break;
-                    case 'rightPage'://get Right Page
-                        var curQuizID=message.data.quizID
-                        curQuizID = await DBConnector.getRightQuizID(curQuizID)
-                        var data = {}
-                        data.comments = await DBConnector.getComments(curQuizID)
-                        data.quiz = await DBConnector.getQuiz(curQuizID)
-                        ws.send(JSON.stringify(data))
-                        break;
-                    default:
-                }
+            //         case 'leftPage'://get Left Page
+            //             var curQuizID=message.data.quizID
+            //             curQuizID = await DBConnector.getLeftQuizID(curQuizID)
+            //             var data = {}
+            //             data.comments = await DBConnector.getComments(curQuizID)
+            //             data.quiz = await DBConnector.getQuiz(curQuizID)
+            //             ws.send(JSON.stringify(data))
+            //             break;
+            //         case 'rightPage'://get Right Page
+            //             var curQuizID=message.data.quizID
+            //             curQuizID = await DBConnector.getRightQuizID(curQuizID)
+            //             var data = {}
+            //             data.comments = await DBConnector.getComments(curQuizID)
+            //             data.quiz = await DBConnector.getQuiz(curQuizID)
+            //             ws.send(JSON.stringify(data))
+            //             break;
+            //         default:
+            //     }
 
 
-            })
+            // })
         
 
         })

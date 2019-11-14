@@ -1,6 +1,6 @@
 const mysql = require('mysql2/promise');
 const config = require('../configs/environments');
-
+const MoneyManager = require("../money/moneyManager")
 
 class DBConnector {
   
@@ -73,7 +73,7 @@ class DBConnector {
     await this.connection.query(`DELETE FROM comments WHERE commentID ='${commentID}'`)
   }
 
-  static async getLastestQuizID(){
+  static async getLatestQuizID(){
     if(!this.connection)
       await this.connect()
 
@@ -103,6 +103,14 @@ class DBConnector {
       return curQuizID
     }
     return quizID[0].quizID
+  }
+
+  static async getLatestQuiz(){
+    if(!this.connection)
+      await this.connect()
+
+    var [quizID]= await this.connection.query("SELECT * from quizs ORDER BY quizID DESC")
+    return quizID[0]
   }
 
 
@@ -142,8 +150,7 @@ class DBConnector {
     const defaultMoney=1000;
     const result = await DBConnector.getQuiz(quizID)
     const quizTime = new Date(result.time)
-    var nowTime = new Date().toLocaleString("en-US", {timeZone: "Asia/Seoul"});
-    nowTime = new Date(nowTime);
+    const nowTime = await MoneyManager.getNowTime()
     var timeMoney=((nowTime.getHours() * 60  + nowTime.getMinutes() * 1 ) - (quizTime.getHours() * 60  + quizTime.getMinutes()*1))*2
     if(timeMoney<0)
     {
