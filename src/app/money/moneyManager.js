@@ -62,7 +62,7 @@ module.exports =  class MoneyManager {
   
   static async getMoney(){
     const defaultMoney=1000;
-    setInterval(updateMoney, 60000);
+    setInterval(updateMoney, 6000);
     async function updateMoney() {
 
       var quiz = await DBConnector.getLatestQuiz()
@@ -82,7 +82,7 @@ module.exports =  class MoneyManager {
           timeMoney=0
         }
         var nowMoney=defaultMoney+timeMoney
-        // console.log(nowMoney)
+        console.log(nowMoney)
         WSConnector.moneyBroadcast(nowMoney)
       }
       
