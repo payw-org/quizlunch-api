@@ -2,26 +2,27 @@ const DBConnector = require('../db/DBConnector');
 const WSConnector = require('../websocket/WSConnector');
 
 exports.getLeftPage = async (req, res) => {
-  console.log("getlp")
   const curQuizID = await DBConnector.getLeftQuizID(req.params.quizID)
   const curQuiz = await DBConnector.getQuiz(curQuizID)
   const curComments = await DBConnector.getQuiz(curQuizID)
   WSConnector.quizBroadcast(curQuiz)
   WSConnector.commentBroadcast(curComments)
+  res.send(200)
+
 };
 
 exports.getRightPage = async (req, res) => {
-  console.log("getrp")
   const curQuizID = await DBConnector.getRightQuizID(req.params.quizID)
   const curQuiz = await DBConnector.getQuiz(curQuizID)
   const curComments = await DBConnector.getQuiz(curQuizID)
   WSConnector.quizBroadcast(curQuiz)
   WSConnector.commentBroadcast(curComments)
+  res.send(200)
+
 };
 
 exports.createQuiz = async (req, res) => {
   
-  console.log("createquiz")
   var today = new Date().toLocaleString("en-US", {timeZone: "Asia/Seoul"});
   today = new Date(today);
   const date = today.getFullYear()+'-'+(today.getMonth()+1)+'-'+today.getDate();
@@ -38,13 +39,11 @@ exports.createQuiz = async (req, res) => {
               'gotAnswer': 0
 
           };
-  console.log(quiz)
   await DBConnector.insertQuiz(quiz)
   res.send(200)
 };
 
 exports.checkAnswer = async (req, res) => {
-  console.log("checkAnswer")
   const answer = await DBConnector.getAnswer(req.params.quizID)
   if(answer==req.params.answer){
     await DBConnector.updateQuizSolved(req.params.quizID)
