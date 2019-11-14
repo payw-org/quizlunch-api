@@ -19,46 +19,46 @@ exports.getRightPage = async (req, res) => {
   WSConnector.commentBroadcast(curComments)
 };
 
-  exports.createQuiz = async (req, res) => {
-    
-    console.log("createquiz")
-    var today = new Date().toLocaleString("en-US", {timeZone: "Asia/Seoul"});
-    today = new Date(today);
-    const date = today.getFullYear()+'-'+(today.getMonth()+1)+'-'+today.getDate();
-    const time = today.getHours() + ":" + today.getMinutes() + ":" + today.getSeconds();
-    const dateTime = date + ' ' + time;
-
-    var quiz = {
-                'money':0,
-                'title':req.body.title,
-                'picture':req.body.picture,
-                'information':req.body.information,
-                'answer':req.body.answer,
-                'time':dateTime,
-                'gotAnswer': 0
-
-            };
-    console.log(quiz)
-    await DBConnector.insertQuiz(quiz)
-    res.send(200)
-  };
-
-  exports.checkAnswer = async (req, res) => {
-    console.log("checkAnswer")
-    const answer = await DBConnector.getAnswer(req.params.quizID)
-    if(answer==req.params.answer){
-      await DBConnector.updateQuizSolved(req.params.quizID)
-      const quiz = await DBConnector.getQuiz(req.params.quizID)
-      WSConnector.quizBroadcast(quiz)
-      res.send("correct")
-    }
-    else{
-      res.send("wrong")
-    }
-  };
-
-
+exports.createQuiz = async (req, res) => {
   
+  console.log("createquiz")
+  var today = new Date().toLocaleString("en-US", {timeZone: "Asia/Seoul"});
+  today = new Date(today);
+  const date = today.getFullYear()+'-'+(today.getMonth()+1)+'-'+today.getDate();
+  const time = today.getHours() + ":" + today.getMinutes() + ":" + today.getSeconds();
+  const dateTime = date + ' ' + time;
+
+  var quiz = {
+              'money':0,
+              'title':req.body.title,
+              'picture':req.body.picture,
+              'information':req.body.information,
+              'answer':req.body.answer,
+              'time':dateTime,
+              'gotAnswer': 0
+
+          };
+  console.log(quiz)
+  await DBConnector.insertQuiz(quiz)
+  res.send(200)
+};
+
+exports.checkAnswer = async (req, res) => {
+  console.log("checkAnswer")
+  const answer = await DBConnector.getAnswer(req.params.quizID)
+  if(answer==req.params.answer){
+    await DBConnector.updateQuizSolved(req.params.quizID)
+    const quiz = await DBConnector.getQuiz(req.params.quizID)
+    WSConnector.quizBroadcast(quiz)
+    res.send("correct")
+  }
+  else{
+    res.send("wrong")
+  }
+};
+
+
+
 
   // exports.updateAnswer = async (req, res) => {
 
