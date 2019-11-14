@@ -35,7 +35,7 @@ exports.getRightPage = async (req, res) => {
                 'gotAnswer': 0
 
             };
-
+    console.log(quiz)
     await DBConnector.insertQuiz(quiz)
     res.send(200)
   };
