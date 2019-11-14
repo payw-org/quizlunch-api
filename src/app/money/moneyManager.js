@@ -30,8 +30,9 @@ module.exports =  class MoneyManager {
 
     setInterval(updateMoney, 6000);
     async function updateMoney() {
-
-      if(this.isItSolved()==0)// If no one send correct answer
+      
+      var solved = this.isItSolved()
+      if(solved==0)// If no one send correct answer
       { 
         var quizTime = this.getLatestQuizTime()
         var nowTime =  this.getNowTime()
