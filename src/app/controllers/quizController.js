@@ -19,6 +19,7 @@ exports.getRightPage = async (req, res) => {
 
   exports.createQuiz = async (req, res) => {
     
+    console.log("test")
     var today = new Date().toLocaleString("en-US", {timeZone: "Asia/Seoul"});
     today = new Date(today);
     const date = today.getFullYear()+'-'+(today.getMonth()+1)+'-'+today.getDate();
