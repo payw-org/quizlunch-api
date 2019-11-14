@@ -31,11 +31,11 @@ module.exports =  class MoneyManager {
     setInterval(updateMoney, 6000);
     async function updateMoney() {
       
-      var solved = this.isItSolved()
+      var solved = isItSolved()
       if(solved==0)// If no one send correct answer
       { 
-        var quizTime = this.getLatestQuizTime()
-        var nowTime =  this.getNowTime()
+        var quizTime = getLatestQuizTime()
+        var nowTime =  getNowTime()
         var timeMoney=0
         if(nowTime.getDate()!=quizTime.getDate())
         {
