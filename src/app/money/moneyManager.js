@@ -35,7 +35,7 @@ module.exports =  class MoneyManager {
   // }
 
   static async updateMoney(){
-    setInterval(Money, 60000);
+    setInterval(Money, 6000);
     async function Money() {
 
       nowMoney=await Utility.getMoney()
