@@ -38,7 +38,7 @@ module.exports =  class MoneyManager {
     setInterval(Money, 6000);
     async function Money() {
 
-      nowMoney=await Utility.getMoney()
+      var nowMoney=await Utility.getMoney()
       console.log(nowMoney)
       WSConnector.moneyBroadcast(nowMoney)
       
