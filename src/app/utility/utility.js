@@ -28,7 +28,7 @@ module.exports =  class Utility {
 
     const defaultMoney=1000;
     var solved = await this.isItSolved()
-    console.log(solveds)
+    console.log(solved)
     if(solved==0)// If no one send correct answer
     { 
         var quizTime = await this.getLatestQuizTime()
