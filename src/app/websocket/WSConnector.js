@@ -1,5 +1,7 @@
 var WebSocketServer = require('ws')
 const DBConnector = require('../db/DBConnector');
+const Utility= require('../utility/utility');
+
 
 module.exports = class WSConnector {
 
@@ -13,26 +15,16 @@ module.exports = class WSConnector {
     static async defaultData(){
         this.WSS.on("connection", async (ws,req)=>{
             var data = {}
-            const latestQuizID = await DBConnector.getLastestQuizID()
+            const latestQuizID = await DBConnector.getLatestQuizID()
             data.comments = await DBConnector.getComments(latestQuizID)
             data.quiz = await DBConnector.getQuiz(latestQuizID)
-
+            data.money=await Utility.getMoney()
             ws.send(JSON.stringify(data))
 
-            // ws.on("message",event=>{
-            //     if(event.aa){
-            //         //request current page
-            //         var data = {}
-            //         data.comments = await DBConnector.getComments(ws.quiz)
-            //         data.quiz = await DBConnector.getQuiz(ws.quiz)
-
-            //         ws.send(JSON.stringify(data))
-            //     }
-
-            // })
             const bugFix = setInterval(()=>{
                 ws.send(JSON.stringify({}))
             },2000)
+
         })
     }
 
@@ -58,17 +50,17 @@ module.exports = class WSConnector {
         })
     }
 
-
-    static async moneyBroadcast(data){
+    static async moneyBroadcast(money){
         if(!this.WSS){
             await this.connect()
         }
+        var data = {}
+        data.money = money
         this.WSS.clients.forEach((client)=>{
             if(client.readyState == WebSocketServer.OPEN){
                 client.send(JSON.stringify(data))
             }
         })
     }
-
 
 }

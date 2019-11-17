@@ -1,7 +1,6 @@
 const mysql = require('mysql2/promise');
 const config = require('../configs/environments');
 
-
 class DBConnector {
   
   static async connect(){
@@ -20,7 +19,7 @@ class DBConnector {
       await this.connect()
 
     var [comments]= await this.connection.query(`SELECT * from comments where quizID='${quizID}' ORDER BY commentID DESC LIMIT ${numOfComments}`)
-    for(var i=0; i<comments.length; i++)
+    for(var i=0; i<comments.length; i++)//hide IP and password
     {
       delete comments[i].password;
       comments[i].ip = comments[i].ip.substring(0,7) + '.***.***'
@@ -73,12 +72,44 @@ class DBConnector {
     await this.connection.query(`DELETE FROM comments WHERE commentID ='${commentID}'`)
   }
 
-  static async getLastestQuizID(){
+  static async getLatestQuizID(){
     if(!this.connection)
       await this.connect()
 
     var [quizID]= await this.connection.query("SELECT quizID from quizs ORDER BY quizID DESC")
     return quizID[0].quizID
+  }
+
+  static async getLeftQuizID(curQuizID){
+    if(!this.connection)
+      await this.connect()
+
+    const [quizID]= await this.connection.query(`SELECT quizID from quizs WHERE quizID <' ${curQuizID}' ORDER BY quizID DESC`)
+    if(quizID.length==0)
+    {
+      return curQuizID
+    }
+    return quizID[0].quizID
+  }
+
+  static async getRightQuizID(curQuizID){
+    if(!this.connection)
+      await this.connect()
+
+    const [quizID]= await this.connection.query(`SELECT quizID from quizs WHERE quizID >' ${curQuizID}' ORDER BY quizID ASC`)
+    if(quizID.length==0)
+    {
+      return curQuizID
+    }
+    return quizID[0].quizID
+  }
+
+  static async getLatestQuiz(){
+    if(!this.connection)
+      await this.connect()
+
+    var [quizID]= await this.connection.query("SELECT * from quizs ORDER BY quizID DESC")
+    return quizID[0]
   }
 
 
@@ -99,7 +130,7 @@ class DBConnector {
     if(!this.connection)
       await this.connect()
 
-    await this.connection.query(`insert into quizs(money,title,picture,information,answer,time,gotAnswer) VALUES ('${money}', '${title}', '${picture}','${information}', '${answer}', '${time}', '${gotAnswer}')`)
+    await this.connection.query(`insert into quizs(money,title,picture,information,answer,time,gotAnswer) VALUES ('${quiz.money}', '${quiz.title}', '${quiz.picture}','${quiz.information}', '${quiz.answer}', '${quiz.time}', '${quiz.gotAnswer}')`)
   }
 
   static async getAnswer(quizID){
@@ -116,11 +147,16 @@ class DBConnector {
       await this.connect()
 
     const defaultMoney=1000;
-    const result = await DBConnector.getQuiz(quizID)
-    const quizTime = new Date(result.time)
+    const quiz = await DBConnector.getQuiz(quizID)
+    var quizTime = new Date(quiz.time)
     var nowTime = new Date().toLocaleString("en-US", {timeZone: "Asia/Seoul"});
     nowTime = new Date(nowTime);
-    var timeMoney=((nowTime.getHours() * 60  + nowTime.getMinutes() * 1 ) - (quizTime.getHours() * 60  + quizTime.getMinutes()*1))*2
+    var timeMoney=0
+    if(nowTime.getDate()!=quizTime.getDate())
+    {
+      timeMoney=60*24
+    }
+    timeMoney=timeMoney+((nowTime.getHours() * 60  + nowTime.getMinutes() * 1 ) - (quizTime.getHours() * 60  + quizTime.getMinutes()*1))*2
     if(timeMoney<0)
     {
       timeMoney=0
@@ -132,8 +168,7 @@ class DBConnector {
   static async insertWinner(winner){
     if(!this.connection)
       await this.connect()
-
-    await this.connection.query(`insert into winners(quizID,nickname,text,ip,time) VALUES ('${quizID}','${nickname}','${text}','${ip}','${time}') `)
+    await this.connection.query(`insert into winners(quizID,money,nickname,text,ip,time) VALUES ('${winner.quizID}','${winner.money}','${winner.nickname}','${winner.text}','${winner.ip}','${winner.time}') `)
   }
 }
 

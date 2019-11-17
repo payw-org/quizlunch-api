@@ -1,30 +1,18 @@
-const DBConnector = require('../db/DBConnector');
 const WSConnector = require('../websocket/WSConnector');
+const Utility = require('../utility/utility')
+
 
 module.exports =  class MoneyManager {
-  
-  static async getMoney(){
-    const defaultMoney=1000;
-    var nowMoney;
-    const quizID = await DBConnector.getLastestQuizID()
-    const result = await DBConnector.getQuiz(quizID)
-    var quizTime = new Date(result.time)
 
-    setInterval(updateMoney, 60000);
-    function updateMoney() {
+  static async updateMoney(){
+    setInterval(Money, 6000);
+    async function Money() {
 
-      var nowTime = new Date().toLocaleString("en-US", {timeZone: "Asia/Seoul"});
-      nowTime = new Date(nowTime);
-      var timeMoney=((nowTime.getHours() * 60  + nowTime.getMinutes() * 1 ) - (quizTime.getHours() * 60  + quizTime.getMinutes()*1))*2
-      if(timeMoney<0)
-      {
-        timeMoney=0
-      }
-      nowMoney=defaultMoney+timeMoney
+      var nowMoney=await Utility.getMoney()
       WSConnector.moneyBroadcast(nowMoney)
+      
     }
   }
 
-  
 }
 
