@@ -32,9 +32,7 @@ module.exports = class WSConnector {
             timeMoney=0
             }
             var nowMoney=defaultMoney+timeMoney
-            console.log(nowMoney)
             data.money=nowMoney
-
 
             ws.send(JSON.stringify(data))
 
