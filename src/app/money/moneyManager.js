@@ -39,6 +39,7 @@ module.exports =  class MoneyManager {
     async function Money() {
 
       nowMoney=await Utility.getMoney()
+      console.log(nowMoney)
       WSConnector.moneyBroadcast(nowMoney)
       
     }
