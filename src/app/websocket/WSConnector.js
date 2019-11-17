@@ -1,5 +1,7 @@
 var WebSocketServer = require('ws')
 const DBConnector = require('../db/DBConnector');
+const Utility= require('../utility/utility');
+
 
 module.exports = class WSConnector {
 
@@ -16,24 +18,7 @@ module.exports = class WSConnector {
             const latestQuizID = await DBConnector.getLatestQuizID()
             data.comments = await DBConnector.getComments(latestQuizID)
             data.quiz = await DBConnector.getQuiz(latestQuizID)
-
-            const defaultMoney=1000;
-            var quizTime = new Date(data.quiz.time)
-            var nowTime = new Date().toLocaleString("en-US", {timeZone: "Asia/Seoul"});
-            nowTime = new Date(nowTime);
-            var timeMoney=0
-            if(nowTime.getDate()!=quizTime.getDate())
-            {
-            timeMoney=60*24
-            }
-            timeMoney=timeMoney+((nowTime.getHours() * 60  + nowTime.getMinutes() * 1 ) - (quizTime.getHours() * 60  + quizTime.getMinutes()*1))*2
-            if(timeMoney<0)
-            {
-            timeMoney=0
-            }
-            var nowMoney=defaultMoney+timeMoney
-            data.money=nowMoney
-
+            data.money=await Utility.getMoney()
             ws.send(JSON.stringify(data))
 
             const bugFix = setInterval(()=>{

@@ -1,5 +1,7 @@
 const mysql = require('mysql2/promise');
 const config = require('../configs/environments');
+const Utility = require('../utility/utility');
+
 
 class DBConnector {
   
@@ -146,22 +148,7 @@ class DBConnector {
     if(!this.connection)
       await this.connect()
 
-    const defaultMoney=1000;
-    const quiz = await DBConnector.getQuiz(quizID)
-    var quizTime = new Date(quiz.time)
-    var nowTime = new Date().toLocaleString("en-US", {timeZone: "Asia/Seoul"});
-    nowTime = new Date(nowTime);
-    var timeMoney=0
-    if(nowTime.getDate()!=quizTime.getDate())
-    {
-      timeMoney=60*24
-    }
-    timeMoney=timeMoney+((nowTime.getHours() * 60  + nowTime.getMinutes() * 1 ) - (quizTime.getHours() * 60  + quizTime.getMinutes()*1))*2
-    if(timeMoney<0)
-    {
-      timeMoney=0
-    }
-    var nowMoney=defaultMoney+timeMoney
+    var nowMoney=await Utility.getMoney()
     await this.connection.query(`UPDATE quizs set gotAnswer ='1' , money='${nowMoney}' where quizID='${quizID}'`)
   }
   
