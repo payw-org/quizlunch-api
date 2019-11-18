@@ -14,11 +14,14 @@ module.exports = class WSConnector {
             const latestQuizID = await DBConnector.getLastestQuizID()
             data.comments = await DBConnector.getComments(latestQuizID)
             data.quiz = await DBConnector.getQuiz(latestQuizID)
+            data.money = await DBConnector.getMoney(latestQuizID)
 
             ws.send(JSON.stringify(data))
-            const bugFix = setInterval(()=>{
-                ws.send(JSON.stringify({}))
-            },2000)
+            const infiniteSend = setInterval((currentQuizID)=>{
+                data = {}
+                data.money = await DBConnector.getMoney(currentQuizID)
+                ws.send(JSON.stringify(data))
+            },1000,latestQuizID)
         })
     }
 
