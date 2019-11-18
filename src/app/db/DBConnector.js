@@ -148,6 +148,7 @@ class DBConnector {
 
     const defaultMoney=1000;
     const quiz = await DBConnector.getQuiz(quizID)
+    
     var quizTime = new Date(quiz.time)
     var nowTime = new Date().toLocaleString("en-US", {timeZone: "Asia/Seoul"});
     nowTime = new Date(nowTime);
