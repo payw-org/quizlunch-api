@@ -3,19 +3,19 @@ const DBConnector = require('../db/DBConnector');
 module.exports =  class Utility {
 
 
-  static async isItSolved()
-  {
-    var result = await DBConnector.getLatestQuiz()
-    var gotAnswer = result.gotAnswer
-    return gotAnswer
-  }
+  // static async isItSolved()
+  // {
+  //   var result = await DBConnector.getLatestQuiz()
+  //   var gotAnswer = result.gotAnswer
+  //   return gotAnswer
+  // }
 
-  static async getLatestQuizTime()
-  {
-    var quiz = await DBConnector.getLatestQuiz()
-    var quizTime = new Date(quiz.time)
-    return quizTime
-  }
+  // static async getLatestQuizTime()
+  // {
+  //   var quiz = await DBConnector.getLatestQuiz()
+  //   var quizTime = new Date(quiz.time)
+  //   return quizTime
+  // }
 
   static async getNowTime()
   {
@@ -28,10 +28,10 @@ module.exports =  class Utility {
   static async getMoney(){
 
     const defaultMoney=1000;
-    var solved = await this.isItSolved()
-    if(solved==0)// If no one send correct answer
+    var quiz = await DBConnector.getLatestQuiz()
+    if(quiz.gotAnswer==0)// If no one send correct answer
     { 
-        var quizTime = await this.getLatestQuizTime()
+        var quizTime = quiz.time
         var nowTime =  await this.getNowTime()
         var timeMoney=0
         if(nowTime.getDate()!=quizTime.getDate())
