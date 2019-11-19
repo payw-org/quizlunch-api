@@ -98,6 +98,18 @@ class DBConnector {
     }
   }
 
+  static async getIps(){
+    if(!this.connection)
+      await this.connect()
+
+    try{
+      const [result]= await this.connection.query(`SELECT ip from nicknames`)
+      return result
+    }catch(e){
+      console.log(`>Error - ${e} `)
+    }
+  }
+
   static async getPassword(commentID){
     if(!this.connection)
       await this.connect()
@@ -161,6 +173,17 @@ class DBConnector {
       console.log(`>Error - ${e} `)
     }
   }
+  
+  static async updateNickname(ip, nickname){
+    if(!this.connection)
+      await this.connect()
+      
+    try{
+      await this.connection.query(`UPDATE nicknames set nickname ='${nickname}' where ip='${ip}'`)
+    }catch(e){
+      console.log(`>Error - ${e} `)
+    }
+  }
 
   static async deleteComment(commentID){
     if(!this.connection)
@@ -171,6 +194,8 @@ class DBConnector {
       console.log(`>Error - ${e} `)
     }
   }
+
+
 }
 
 module.exports = DBConnector
