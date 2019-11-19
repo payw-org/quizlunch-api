@@ -11,4 +11,4 @@ router.post('/', commentController.create);
 
 router.delete('/', commentController.delete);
 
-module.exports =router
+module.exports = router

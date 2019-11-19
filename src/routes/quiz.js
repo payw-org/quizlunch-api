@@ -13,4 +13,4 @@ router.post('/', quizController.createQuiz);
 
 // router.put('/', quizController.updateAnswer);
 
-module.exports =router
+module.exports = router
