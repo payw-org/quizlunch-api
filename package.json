@@ -4,7 +4,7 @@
   "description": "",
   "main": "index.js",
   "scripts": {
-    "start": "node src/app/main",
+    "start": "node src/main",
     "test": "echo \"Error: no test specified\" && exit 1",
     "build": "node_modules/.bin/webpack --config webpack.config.js",
     "start-hcj": "node build/bundle.js",
