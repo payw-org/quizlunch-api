@@ -1,9 +1,9 @@
 const express = require('express');
 const router = express.Router();
 
-const quizRouter = require('./routes/quiz')
-const winnerRouter = require('./routes/winner')
-const commentRouter = require('./routes/comment')
+const quizRouter = require('./quiz')
+const winnerRouter = require('./winner')
+const commentRouter = require('./comment')
 
 router.use('/quiz',quizRouter)
 router.use('/winner',winnerRouter)
