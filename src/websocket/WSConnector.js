@@ -11,13 +11,13 @@ module.exports = class WSConnector {
     static async defaultData(){
         this.WSS.on("connection", async (ws,req)=>{
             var data = {}
-            const latestQuizID = await DBConnector.getLastestQuizID()
+            const latestQuizID = await DBConnector.getTodayQuizID()
             data.comments = await DBConnector.getComments(latestQuizID)
             data.quiz = await DBConnector.getQuiz(latestQuizID)
             data.money = await DBConnector.getMoney(latestQuizID)
 
             ws.send(JSON.stringify(data))
-            const infiniteSend = setInterval((currentQuizID)=>{
+            const infiniteSend = setInterval(async (currentQuizID)=>{
                 data = {}
                 data.money = await DBConnector.getMoney(currentQuizID)
                 ws.send(JSON.stringify(data))
