@@ -2,8 +2,10 @@ require('dotenv').config()
 const express = require('express');
 const app = express();
 const bodyParser = require('body-parser')
-const WSConnector = require('./websocket/WSConnector')
 const port = 3200;
+
+const WSConnector = require('./websocket/WSConnector')
+const MYSceduler = require('./apps/scheduler')
 
 // solve cors problem
 const CORS = require('cors')();
@@ -23,3 +25,4 @@ app.listen(port, () => {
 })
 
 WSConnector.connect()
+MYSceduler.run()
