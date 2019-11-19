@@ -32,12 +32,16 @@ class DBConnector {
 
   }
 
-  static async getLastestQuizID(){
+  static async getTodayQuizID(){
     if(!this.connection)
       await this.connect()
 
     try{
-      var [result]= await this.connection.query("SELECT quizID from quizs ORDER BY quizID DESC")
+      var today = Date()
+      var [result]= await this.connection.query(`SELECT quizID from quizs WHERE time=${today}`)
+      if( result.length == 0){
+        ;[result]= await this.connection.query("SELECT quizID from quizs ORDER BY quizID DESC")
+      }
       return result[0].quizID
     }catch(e){
       console.log(`>Error - ${e} `)
