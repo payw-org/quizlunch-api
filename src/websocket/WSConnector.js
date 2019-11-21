@@ -11,38 +11,33 @@ module.exports = class WSConnector {
     static async defaultData(){
         this.WSS.on("connection", async (ws,req)=>{
             var data = {}
-            const latestQuizID = await DBConnector.getTodayQuizID()
-            data.comments = await DBConnector.getComments(latestQuizID)
-            data.quiz = await DBConnector.getQuiz(latestQuizID)
-            data.money = await DBConnector.getMoney(latestQuizID)
+            const todayQuizID = this.currentQuizID = await DBConnector.getTodayQuizID()
+            data['renew comments'] = await DBConnector.getComments(todayQuizID)
+            data['renew quiz'] = await DBConnector.getQuiz(todayQuizID)
+            data['renew money'] = await DBConnector.getMoney(todayQuizID)
 
             ws.send(JSON.stringify(data))
-            const infiniteSend = setInterval(async (currentQuizID)=>{
+            const infiniteSend = setInterval(async ()=>{
                 data = {}
-                data.money = await DBConnector.getMoney(currentQuizID)
+                data['renew money'] = await DBConnector.getMoney(this.currentQuizID)
                 ws.send(JSON.stringify(data))
-            },1000,latestQuizID)
+            },1000)
         })
     }
 
-    static async broadcastComment(data){
-        if(!this.WSS){
-            await this.connect()
-        }
-        this.WSS.clients.forEach((client)=>{
-            if(client.readyState == WebSocketServer.OPEN){
-                client.send(JSON.stringify({comment:data}))
-            }
-        })
+    static setCurrentQuizID(quizID){
+        this.currentQuizID = quizID
     }
 
-    static async quizBroadcast(data){
+    static async broadcast(key, value){
         if(!this.WSS){
             await this.connect()
         }
+        var data = {}
+        data[key] = value
         this.WSS.clients.forEach((client)=>{
             if(client.readyState == WebSocketServer.OPEN){
-                client.send(JSON.stringify({quiz:data}))
+                client.send(JSON.stringify(data))
             }
         })
     }
