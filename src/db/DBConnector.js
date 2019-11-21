@@ -37,8 +37,9 @@ class DBConnector {
       await this.connect()
 
     try{
-      var today = Date()
-      var [result]= await this.connection.query(`SELECT quizID from quizs WHERE time=${today}`)
+      var today = new Date()
+      var YYYYMMDD = `${today.getFullYear()}-${('0'+(today.getMonth()+1)).slice(-2)}-${('0'+(today.getDate()+1)).slice(-2)}`
+      var [result]= await this.connection.query(`SELECT quizID from quizs WHERE time=${YYYYMMDD}`)
       if( result.length == 0){
         ;[result]= await this.connection.query("SELECT quizID from quizs ORDER BY quizID DESC")
       }

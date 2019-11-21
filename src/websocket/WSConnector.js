@@ -25,7 +25,7 @@ module.exports = class WSConnector {
         })
     }
 
-    static async commentBroadcast(data){
+    static async broadcastComment(data){
         if(!this.WSS){
             await this.connect()
         }
