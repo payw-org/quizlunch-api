@@ -38,8 +38,14 @@ class DBConnector {
 
     try{
       var today = new Date()
-      var YYYYMMDD = `${today.getFullYear()}-${('0'+(today.getMonth()+1)).slice(-2)}-${('0'+(today.getDate()+1)).slice(-2)}`
-      var [result]= await this.connection.query(`SELECT quizID from quizs WHERE time=${YYYYMMDD}`)
+      if(today.getHours() < 12)
+        today.setDate(today.getDate()+1)
+      var YYYY = today.getFullYear()
+      var MM = ('0'+(today.getMonth()+1)).slice(-2)
+      var DD = ('0'+(today.getDate())).slice(-2)
+      
+      var YYYYMMDD = `${YYYY}-${MM}-${DD}`
+      var [result]= await this.connection.query(`SELECT quizID from quizs WHERE time='${YYYYMMDD}'`)
       if( result.length == 0){
         ;[result]= await this.connection.query("SELECT quizID from quizs ORDER BY quizID DESC")
       }
