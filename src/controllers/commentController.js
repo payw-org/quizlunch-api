@@ -32,7 +32,7 @@ exports.create = async (req, res) => {
       'time':dateTime 
     }
     await DBConnector.insertComment(comment)
-    WSConnector.commentBroadcast(comment)
+    WSConnector.broadcast('insert comment', comment)
     res.send(200)
   };
 
@@ -44,8 +44,8 @@ exports.delete = async (req, res) => {
     if(password[0].password==req.body.password)
     {
         await DBConnector.deleteComment(req.body.commentID)
-        const comments = await DBConnector.getComments(req.body.quizID)  
-        WSConnector.commentBroadcast(comments)
+        const comment = await DBConnector.getComments(req.body.quizID)  
+        WSConnector.broadcast('delete comment', req.body.commentID)
     }
     else 
     {
