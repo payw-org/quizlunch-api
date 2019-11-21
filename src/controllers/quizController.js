@@ -26,7 +26,7 @@ const WSConnector = require('../websocket/WSConnector');
     if(answer==req.params.answer){
       await DBConnector.updateQuizSolved(req.params.quizID)
       const quiz = await DBConnector.getQuiz(req.params.quizID)
-      WSConnector.quizBroadcast(quiz)
+      WSConnector.broadcast('renew quiz', quiz)
       res.send("correct")
     }
     else{
@@ -38,5 +38,5 @@ const WSConnector = require('../websocket/WSConnector');
 
   //   await DBConnector.updateQuizSolved(req.body.quizID)
   //   const quiz = await DBConnector.getQuiz(req.body.quizID)  
-  //   WSConnector.quizBroadcast(quiz)
+  //   WSConnector.broadcastQuiz(quiz)
   // };
