@@ -45,10 +45,8 @@ class DBConnector {
       var DD = ('0'+(today.getDate())).slice(-2)
       
       var YYYYMMDD = `${YYYY}-${MM}-${DD}`
-      var [result]= await this.connection.query(`SELECT quizID from quizs WHERE time='${YYYYMMDD}'`)
-      if( result.length == 0){
-        ;[result]= await this.connection.query("SELECT quizID from quizs ORDER BY quizID DESC")
-      }
+      var [result]= await this.connection.query(`SELECT quizID from quizs WHERE time<='${YYYYMMDD}' ORDER BY quizID ASC`)
+      
       return result[0].quizID
     }catch(e){
       console.log(`>Error - ${e} `)
