@@ -4,6 +4,12 @@ const WSConnector = require('../websocket/WSConnector');
 exports.create = async (req, res) => {
     const axios = require('axios');
 
+    // ip
+    var ip = req.headers['x-forwarded-for'] ||
+     req.connection.remoteAddress ||
+     req.socket.remoteAddress ||
+     req.connection.socket.remoteAddress;
+
     // nickname
     var nickname = await DBConnector.getNickname(ip)
     if(nickname.length==0){
@@ -14,12 +20,6 @@ exports.create = async (req, res) => {
     else{
       nickname = nickname[0].nickname
     }
-
-    // ip
-    var ip = req.headers['x-forwarded-for'] ||
-     req.connection.remoteAddress ||
-     req.socket.remoteAddress ||
-     req.connection.socket.remoteAddress;
 
     // time
     var today = new Date()
