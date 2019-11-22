@@ -7,7 +7,9 @@
     "start": "node src/main",
     "test": "echo \"Error: no test specified\" && exit 1",
     "build": "node_modules/.bin/webpack --config webpack.config.js",
-    "start-hcj": "node build/bundle.js",
+    "start-hcj": "pm2 start npm --name 'api-dev-hcj' -- run start",
+    "stop-hcj": "pm2 delete api-dev-hcj",
+    "restart-hcj": "pm2 delete api-dev-hcj && pm2 start npm --name 'api-dev-hcj' -- run start",
     "clean": "rm -rf build"
   },
   "keywords": [],
