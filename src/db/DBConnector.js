@@ -77,12 +77,12 @@ class DBConnector {
     }
   }
 
-  static async getComments(quizID, numOfComments=20){
+  static async getComments(quizID, startIndex=0 ,numOfComments=20){
     if(!this.connection)
       await this.connect()
 
     try{
-      var [result]= await this.connection.query(`SELECT * from comments where quizID='${quizID}' ORDER BY commentID DESC LIMIT ${numOfComments}`)
+      var [result]= await this.connection.query(`SELECT * from comments where quizID='${quizID}' ORDER BY commentID DESC LIMIT ${startIndex},${numOfComments}`)
       for(var i=0; i<result.length; i++)
       {
         delete result[i].password;
@@ -136,7 +136,7 @@ class DBConnector {
       await this.connect()
 
     try{
-      await this.connection.query(`insert into nicknames (ip ,nickname) VALUES ('${ip}', '${nickname}') `);
+      await this.connection.query(`insert into nicknames (ip ,nickname) VALUES ('${ip}', '${nickname}') `)
     }catch(e){
       console.log(`>Error - ${e} `)
     }
@@ -147,6 +147,8 @@ class DBConnector {
       await this.connect()
     try{
       await this.connection.query(`insert into comments (quizID ,nickname, password, text, ip ,time ) VALUES ('${comment.quizID}', '${comment.nickname}', '${comment.password}', '${comment.text}', '${comment.ip}', '${comment.time}') `)
+      var [result] = await this.connection.query(`SELECT commentID FROM comments WHERE quizID='${comment.quizID}' and nickname='${comment.nickname}' and password='${comment.password}' and text='${comment.text}' and ip='${comment.ip}' and time='${comment.time}'`)
+      return result[0].commentID
     }catch(e){
       console.log(`>Error - ${e} `)
     }
