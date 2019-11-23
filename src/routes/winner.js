@@ -9,4 +9,4 @@ router.post('/', winnerController.create);
 
 
 
-module.exports =router
+module.exports = router
