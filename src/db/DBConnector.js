@@ -176,24 +176,28 @@ class DBConnector {
   }
 
   static async updateQuizSolved(quizID){
+
     if(!this.connection)
       await this.connect()
-    try{
-      await this.connection.query(`UPDATE quizs set gotAnswer ='1' where quizID='${quizID}'`)
-    }catch(e){
-      console.log(`>Error - ${e} `)
+
+    const defaultMoney=1000;
+    const quiz = await DBConnector.getQuiz(quizID)
+    
+    var quizTime = new Date(quiz.time)
+    var nowTime = new Date().toLocaleString("en-US", {timeZone: "Asia/Seoul"});
+    nowTime = new Date(nowTime);
+    var timeMoney=0
+    if(nowTime.getDate()!=quizTime.getDate())
+    {
+      timeMoney=60*24
     }
-  }
-  
-  static async updateNickname(ip, nickname){
-    if(!this.connection)
-      await this.connect()
-      
-    try{
-      await this.connection.query(`UPDATE nicknames set nickname ='${nickname}' where ip='${ip}'`)
-    }catch(e){
-      console.log(`>Error - ${e} `)
+    timeMoney=timeMoney+((nowTime.getHours() * 60  + nowTime.getMinutes() * 1 ) - (quizTime.getHours() * 60  + quizTime.getMinutes()*1))*2
+    if(timeMoney<0)
+    {
+      timeMoney=0
     }
+    var nowMoney=defaultMoney+timeMoney
+    await this.connection.query(`UPDATE quizs set gotAnswer ='1' , money='${nowMoney}' where quizID='${quizID}'`)
   }
 
   static async deleteComment(commentID){
@@ -206,7 +210,29 @@ class DBConnector {
     }
   }
 
+  static async getLeftQuizID(curQuizID){
+    if(!this.connection)
+      await this.connect()
 
+    const [quizID]= await this.connection.query(`SELECT quizID from quizs WHERE quizID <' ${curQuizID}' ORDER BY quizID DESC`)
+    if(quizID.length==0)
+    {
+      return curQuizID
+    }
+    return quizID[0].quizID
+  }
+
+  static async getRightQuizID(curQuizID){
+    if(!this.connection)
+      await this.connect()
+
+    const [quizID]= await this.connection.query(`SELECT quizID from quizs WHERE quizID >' ${curQuizID}' ORDER BY quizID ASC`)
+    if(quizID.length==0)
+    {
+      return curQuizID
+    }
+    return quizID[0].quizID
+  }
 }
 
 module.exports = DBConnector
