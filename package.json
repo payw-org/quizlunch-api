@@ -7,7 +7,7 @@
     "start": "node src/main",
     "test": "echo \"Error: no test specified\" && exit 1",
     "build": "node_modules/.bin/webpack --config webpack.config.js",
-    "start-dist": "npm run build && pm2 start npm --name 'api-dist' -- run start",
+    "start-dist": "pm2 start npm --name 'api-dist' -- run start",
     "stop-dist": "pm2 delete api-dist",
     "restart-dist": "npm run stop-dist && npm run start-dist"
   },
