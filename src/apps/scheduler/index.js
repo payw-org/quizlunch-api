@@ -21,21 +21,29 @@ module.exports = class MYScheduler {
         const quizID = await DBConnector.getTodayQuizID()
         const quiz = await DBConnector.getQuiz(quizID)
         const comments = await DBConnector.getComments(quizID)
-        const money = await DBConnector.getComments(quizID)
         await WSConnector.broadcast('renew quiz', quiz)
         await WSConnector.setCurrentQuizID(quizID)
-        await WSConnector.broadcast('renew money', money)
         await WSConnector.broadcast('renew comments', comments)
     }
 
     static async renewMoney(){
-        
+        const quizID = await DBConnector.getTodayQuizID()
+        var money = {}
+        var timeStart = new Date()
+        var timeNow= Date.now()
+        timeStart.setHours(timeStart.getHours()-12)
+        timeStart.setMinutes(0)
+        timeStart.setSeconds(0)
+
+        money['value'] = Math.floor((timeNow-timeStart)/1000/20)
+        money['quizID'] = quizID
+        await WSConnector.broadcast('renew money', money)
     }
 
     static async run(){
         this.schedules = {}
         this.schedules.changeNicknameAtNoon = scheduler.scheduleJob(atNoon,this.changeNicknames)
         this.schedules.broadcastQuizAtNoon = scheduler.scheduleJob(atNoon,this.renewQuiz)
-        this.schedules.broadcastMoneyContinuously = scheduler.scheduleJob(continuously,this.renewQuiz)
+        this.schedules.broadcastMoneyContinuously = scheduler.scheduleJob(continuously,this.renewMoney)
     }
 }
