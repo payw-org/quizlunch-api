@@ -17,11 +17,6 @@ module.exports = class WSConnector {
             data['renew money'] = await DBConnector.getMoney(todayQuizID)
 
             ws.send(JSON.stringify(data))
-            const infiniteSend = setInterval(async ()=>{
-                data = {}
-                data['renew money'] = await DBConnector.getMoney(this.currentQuizID)
-                ws.send(JSON.stringify(data))
-            },1000)
         })
     }
 
