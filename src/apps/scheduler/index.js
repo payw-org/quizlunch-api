@@ -3,6 +3,7 @@ const DBConnector = require('../../db/DBConnector')
 const WSConnector = require('../../websocket/WSConnector')
 
 const atNoon = '0 0 12 * * *'
+const continuously = '* * * * * *'
 
 module.exports = class MYScheduler {
 
@@ -27,9 +28,14 @@ module.exports = class MYScheduler {
         await WSConnector.broadcast('renew comments', comments)
     }
 
+    static async renewMoney(){
+        
+    }
+
     static async run(){
         this.schedules = {}
         this.schedules.changeNicknameAtNoon = scheduler.scheduleJob(atNoon,this.changeNicknames)
         this.schedules.broadcastQuizAtNoon = scheduler.scheduleJob(atNoon,this.renewQuiz)
+        this.schedules.broadcastMoneyContinuously = scheduler.scheduleJob(continuously,this.renewQuiz)
     }
 }
