@@ -9,10 +9,10 @@ module.exports = class DB{
 
         try{
             if(values !== null){
-                ;[result] = this.conn.query(query,values)
+                ;[result] = await this.conn.query(query,values)
             }
             else{
-                ;[result] = this.conn.query(query)
+                ;[result] = await this.conn.query(query)
             }
             return result            
         }catch(e){
