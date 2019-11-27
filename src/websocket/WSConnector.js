@@ -1,5 +1,6 @@
 var WebSocketServer = require('ws')
-const DBConnector = require('../db/DBConnector');
+const DBQuizs = require('../db/DBQuizs');
+const DBComments = require('../db/DBComments');
 
 module.exports = class WSConnector {
 
@@ -11,17 +12,39 @@ module.exports = class WSConnector {
     static async defaultData(){
         this.WSS.on("connection", async (ws,req)=>{
             var data = {}
-            const todayQuizID = this.currentQuizID = await DBConnector.getTodayQuizID()
-            data['renew comments'] = await DBConnector.getComments(todayQuizID)
-            data['renew quiz'] = await DBConnector.getQuiz(todayQuizID)
-            data['renew money'] = await DBConnector.getMoney(todayQuizID)
+            var result
 
+            // get today quizID
+            var today = new Date()
+            if(today.getHours() < 12)
+                today.setDate(today.getDate()-1)
+            var YYYY = today.getFullYear()
+            var MM = ('0'+(today.getMonth()+1)).slice(-2)
+            var DD = ('0'+(today.getDate())).slice(-2)
+            var YYYYMMDD = `${YYYY}-${MM}-${DD}`
+            result = await DBQuizs.getIDByTime(YYYYMMDD)
+            var todayQuizID =  result[0].quizID
+
+            // get today quiz
+            result = DBQuizs.getQuizByID(quizID)
+            if(result[0].money === 0){ // Not solved quiz
+                var quizStartAt = new Date()
+                if(quizStartAt.getHours() < 12)
+                    quizStartAt.setDay(quizStartAt.getDate()-1)
+                quizStartAt.setHours(12)
+                quizStartAt.setMinutes(0)
+                quizStartAt.setSeconds(0)
+                result[0].money = Math.floor((Date.now()-quizStartAt)/1000/20)
+            }
+            data['renew quiz'] = result[0]
+
+            // get today comments
+            result = await DBComments.getCommentsByQuizID(todayQuizID)
+            data['renew comments'] = result
+
+            // send
             ws.send(JSON.stringify(data))
         })
-    }
-
-    static setCurrentQuizID(quizID){
-        this.currentQuizID = quizID
     }
 
     static async broadcast(key, value){
