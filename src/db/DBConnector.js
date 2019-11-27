@@ -176,28 +176,18 @@ class DBConnector {
   }
 
   static async updateQuizSolved(quizID){
-
     if(!this.connection)
       await this.connect()
 
-    const defaultMoney=1000;
-    const quiz = await DBConnector.getQuiz(quizID)
-    
-    var quizTime = new Date(quiz.time)
-    var nowTime = new Date().toLocaleString("en-US", {timeZone: "Asia/Seoul"});
-    nowTime = new Date(nowTime);
-    var timeMoney=0
-    if(nowTime.getDate()!=quizTime.getDate())
-    {
-      timeMoney=60*24
-    }
-    timeMoney=timeMoney+((nowTime.getHours() * 60  + nowTime.getMinutes() * 1 ) - (quizTime.getHours() * 60  + quizTime.getMinutes()*1))*2
-    if(timeMoney<0)
-    {
-      timeMoney=0
-    }
-    var nowMoney=defaultMoney+timeMoney
-    await this.connection.query(`UPDATE quizs set gotAnswer ='1' , money='${nowMoney}' where quizID='${quizID}'`)
+    var quizStartAt = dateNow
+    if(quizStartAt.getHours() < 12)
+      quizStartAt.setDay(quizStartAt.getDate()-1)
+    quizStartAt.setHours(12)
+    quizStartAt.setMinutes(0)
+    quizStartAt.setSeconds(0)
+    var money = Math.floor((Date.now()-quizStartAt)/1000/20)
+
+    await this.connection.query(`UPDATE quizs set gotAnswer ='1' , money='${money}' where quizID='${quizID}'`)
   }
 
   static async deleteComment(commentID){
