@@ -3,11 +3,11 @@ const DB = require('./index')
 module.exports = class DBQuizs{
 
     static async getQuizByID(quizID){
-        var query = `SELECT information, money, picture, quizID, time, title, answer FROM quizs where quizID = ? `
+        var query = `SELECT information, money, picture, quizID, time, title, answer, gotAnswer FROM quizs where quizID = ? `
         var values = [quizID]
         var result = await DB.query(query, values)
-
-        result[0].answer = ''
+        if(result[0].gotAnswer === 0)
+            result[0].answer = ''
         if(result[0].money === 0){ // Not solved quiz
             var quizStartAt = new Date()
             if(quizStartAt.getHours() < 12)
@@ -67,6 +67,14 @@ module.exports = class DBQuizs{
 
     static async updateGotAnswerByID(quizID){
         var query = `UPDATE quizs SET gotAnswer ='1', money = ? WHERE quizID = ?`
+        // calc money
+        var quizStartAt = new Date()
+        if(quizStartAt.getHours() < 12)
+            quizStartAt.setDay(quizStartAt.getDate()-1)
+        quizStartAt.setHours(12)
+        quizStartAt.setMinutes(0)
+        quizStartAt.setSeconds(0)
+        var money = Math.floor((Date.now()-quizStartAt)/1000/20)
         var values = [money, quizID]
         await DB.query(query, values)
     }
