@@ -1,5 +1,5 @@
 const DBWinners = require('../../db/DBWinners');
-
+const DBQuizs = require('../../db/DBQuizs')
 
 exports.create = async (req, res) => {
   // time
@@ -35,4 +35,23 @@ exports.create = async (req, res) => {
 
   await DBWinners.insertWinner(winner)
   res.send("winner create sucsess")
+}
+
+
+exports.update = async (req, res) => {
+  // ip
+  var ip = req.headers['x-forwarded-for'] || req.connection.remoteAddress || req.socket.remoteAddress || req.connection.socket.remoteAddress;
+  var quizID = await DBQuizs.getIDByTime()
+  var winner = await DBWinners.getWinnerByQuizID(quizID)
+
+  if(winner.ip === solvedIP && winner.account === ''){
+    winner['fullName'] = req.body.fullName
+    winner['bank'] = req.body.bank
+    winner['account'] = req.body.account
+    await DBWinners.updateWinner(winner)
+    res.sendStatus(200) 
+  }
+  else{
+    res.sendStatus(504)
+  }
 }

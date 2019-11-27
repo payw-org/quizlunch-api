@@ -1,6 +1,7 @@
 const WSConnector = require('../../websocket/WSConnector');
 const DBQuizs = require('../../db/DBQuizs');
 const DBComments = require('../../db/DBComments');
+const DBNicknames = require('../../db/DBNicknames')
 
 exports.getPreviousPage = async (req, res) => {
   const quizID = await DBQuizs.getPreviousIDByID(req.params.quizID)
@@ -46,6 +47,9 @@ exports.checkAnswer = async (req, res) => {
   const answer = await DBQuizs.getAnswerByID(req.params.quizID)
   if(answer == req.params.answer){
     // quiz is solved
+    var ip = req.headers['x-forwarded-for'] || req.connection.remoteAddress || req.socket.remoteAddress || req.connection.socket.remoteAddress
+    var nickname = await DBNicknames.getNicknameByIP(ip)
+    await DBWinners.insertWinner({quizID:req.params.quizID, nickname:nickname, ip:ip})
     await DBQuizs.updateGotAnswerByID(req.params.quizID)
     const quiz = await DBQuizs.getQuizByID(req.params.quizID)
     WSConnector.broadcast('renew quiz', quiz)
