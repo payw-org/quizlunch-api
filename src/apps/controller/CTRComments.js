@@ -14,13 +14,10 @@ exports.create = async (req, res) => {
 
   // nickname
   var nickname = await DBNicknames.getNicknameByIP(ip)
-  if(nickname.length==0){
+  if(nickname === null){
     result = await axios.get('http://rng.api.quizlunch.com/new');
     nickname = result.data
     await DBNicknames.insertNickname({ip:ip, name:nickname})
-  }
-  else{
-    nickname = nickname[0].nickname
   }
 
   // time
@@ -39,9 +36,8 @@ exports.create = async (req, res) => {
     'time':YYYYMMDD 
   }
   await DBComments.insertComment(comment)
-  result = await DBComments.getIDByComment(comment)
+  comment.commentID = await DBComments.getIDByComment(comment)
   delete comment.password;
-  comment.commentID = result[0].commentID
   WSConnector.broadcast('insert comment', comment)
   res.sendStatus(200)
 }
@@ -53,7 +49,7 @@ exports.more = async (req, res) => {
 
 exports.delete = async (req, res) => {
   const password = await DBComments.getPasswordByID(req.body.commentID)
-  if(password[0].password == req.body.password){
+  if(password === req.body.password){
     await DBComments.deleteCommentByID(req.body.commentID)
     WSConnector.broadcast('delete comment', req.body.commentID)
   }
