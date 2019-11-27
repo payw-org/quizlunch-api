@@ -18,7 +18,7 @@ module.exports = class DBComments{
     }
     
     static async getIDByComment(comment){
-        var query = `SELECT commentID FROM comments WHERE quizID = ? and nickname = ? and password = ? and text = ? and ip = ? and time = ?` 
+        var query = `SELECT commentID FROM comments WHERE quizID = ? and nickname = ? and password = ? and text = ? and ip = ? and time = ? ORDER BY commentID DESC`
         var values = [comment.quizID, comment.nickname, comment.password, comment.text, comment.ip, comment.time]
         var result = await DB.query(query, values)
         return result[0].commentID
