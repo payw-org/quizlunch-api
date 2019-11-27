@@ -10,4 +10,5 @@ class DBConnector {
     return this.connection
   }
 }
+
 module.exports = DBConnector
