@@ -12,21 +12,9 @@ module.exports = class WSConnector {
     static async defaultData(){
         this.WSS.on("connection", async (ws,req)=>{
             var data = {}
-            var result
-
-            // get today quizID
-            result = await DBQuizs.getIDByTime()
-            var todayQuizID =  result[0].quizID
-
-            // get today quiz
-            result = DBQuizs.getQuizByID(quizID)
-            data['renew quiz'] = result[0]
-
-            // get today comments
-            result = await DBComments.getCommentsByQuizID(todayQuizID)
-            data['renew comments'] = result
-
-            // send
+            var todayQuizID = await DBQuizs.getIDByTime()
+            data['renew quiz'] = await DBQuizs.getQuizByID(todayQuizID)
+            data['renew comments'] = await DBComments.getCommentsByQuizID(todayQuizID)
             ws.send(JSON.stringify(data))
         })
     }
