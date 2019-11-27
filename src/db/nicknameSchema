@@ -1,4 +1,0 @@
-create table nicknames(
-    ip char(20) not null PRIMARY KEY,
-    nickname char(20) not null
-    );
