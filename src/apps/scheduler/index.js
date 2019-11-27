@@ -1,5 +1,7 @@
 const scheduler = require('node-schedule');
-const DBConnector = require('../../db/DBConnector')
+const DBQuizs = require('../../db/DBQuizs')
+const DBComments = require('../../db/DBComments')
+const DBNicknames = require('../../db/DBNicknames')
 const WSConnector = require('../../websocket/WSConnector')
 
 const atNoon = '0 0 12 * * *'
@@ -8,34 +10,36 @@ const continuously = '* * * * * *'
 module.exports = class MYScheduler {
 
     static async changeNicknames(){
-        const ipList = await DBConnector.getIps()
+        const ipList = await DBNicknames.getIPAll()
         var nickname
         for(var i=0; i<ipList.length; i++){
             nickname = await axios.get('http://rng.api.quizlunch.com/new').data;
-            await DBConnector.updateNickname(ipList[i], nickname)
+            await DBNicknames.updateNickname({ip:ipList[i], name:nickname})
         }
         console.log('>Nickname has been changed.')
     }
 
     static async renewQuiz(){
-        const quizID = await DBConnector.getTodayQuizID()
-        const quiz = await DBConnector.getQuiz(quizID)
-        const comments = await DBConnector.getComments(quizID)
+        const quizID = await DBQuizs.getIDByTime()
+        const quiz = await DBQuizs.getQuizByID(quizID)
+        const comments = await DBComments.getCommentsByQuizID(quizID)
         await WSConnector.broadcast('renew quiz', quiz)
-        await WSConnector.setCurrentQuizID(quizID)
         await WSConnector.broadcast('renew comments', comments)
     }
 
     static async renewMoney(){
-        const quizID = await DBConnector.getTodayQuizID()
+        const quizID = await DBQuizs.getIDByTime()
         var money = {}
-        var timeStart = new Date()
-        var timeNow= Date.now()
-        timeStart.setHours(timeStart.getHours()-12)
-        timeStart.setMinutes(0)
-        timeStart.setSeconds(0)
 
-        money['value'] = Math.floor((timeNow-timeStart)/1000/20)
+        // calc money
+        var quizStartAt = new Date()
+        if(quizStartAt.getHours() < 12)
+            quizStartAt.setDay(quizStartAt.getDate()-1)
+        quizStartAt.setHours(12)
+        quizStartAt.setMinutes(0)
+        quizStartAt.setSeconds(0)
+        
+        money['value'] = Math.floor((Date.now()-quizStartAt)/1000/20)
         money['quizID'] = quizID
         await WSConnector.broadcast('renew money', money)
     }
