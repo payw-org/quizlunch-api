@@ -1,0 +1,9 @@
+
+create table winners(
+    quizID int not null PRIMARY KEY,
+    money int,
+    nickname char(20),
+    text char(20),
+    ip char(80),
+    time char(20)
+    );
