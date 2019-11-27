@@ -19,4 +19,10 @@ module.exports = class DBNicknames{
         var values = [nickname.ip, nickname.name]
         await DB.query(query, values)
     }
+
+    static async updateNickname(nickname){
+        var query = `UPDATE nicknames SET name = ? WHERE ip = ?`
+        var values = [nickname.name, nickname.ip]
+        await DB.query(query, values)
+    }
 }

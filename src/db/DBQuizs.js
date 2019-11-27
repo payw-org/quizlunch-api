@@ -6,7 +6,15 @@ module.exports = class DBQuizs{
         var query = `SELECT information, money, picture, quizID, time, title FROM quizs where quizID = ? `
         var values = [quizID]
         var [result] = await DB.query(query, values)
-
+        if(result[0].money === 0){ // Not solved quiz
+            var quizStartAt = new Date()
+            if(quizStartAt.getHours() < 12)
+                quizStartAt.setDay(quizStartAt.getDate()-1)
+            quizStartAt.setHours(12)
+            quizStartAt.setMinutes(0)
+            quizStartAt.setSeconds(0)
+            result[0].money = Math.floor((Date.now()-quizStartAt)/1000/20)
+        }
         return result
     }
 
@@ -24,9 +32,20 @@ module.exports = class DBQuizs{
         return result
     }
 
-    static async getIDByTime(time){
+    static async getIDByTime(time=null){
         var query = `SELECT quizID from quizs WHERE time <= ?  ORDER BY quizID ASC`
         var values = [time]
+
+        if(time === null){
+            var today = new Date()
+            if(today.getHours() < 12)
+                today.setDate(today.getDate()-1)
+            var YYYY = today.getFullYear()
+            var MM = ('0'+(today.getMonth()+1)).slice(-2)
+            var DD = ('0'+(today.getDate())).slice(-2)
+            var YYYYMMDD = `${YYYY}-${MM}-${DD}`
+            values = [YYYYMMDD]
+        }
         var [result] = await DB.query(query, values)
         return result
     }
@@ -46,13 +65,6 @@ module.exports = class DBQuizs{
     }
 
     static async updateGotAnswerByID(quizID){
-        // var quizStartAt = new Date()
-        // if(quizStartAt.getHours() < 12)
-        //   quizStartAt.setDay(quizStartAt.getDate()-1)
-        // quizStartAt.setHours(12)
-        // quizStartAt.setMinutes(0)
-        // quizStartAt.setSeconds(0)
-        // var money = Math.floor((Date.now()-quizStartAt)/1000/20)
         var query = `UPDATE quizs SET gotAnswer ='1', money = ? WHERE quizID = ?`
         var values = [money, quizID]
         await DB.query(query, values)
