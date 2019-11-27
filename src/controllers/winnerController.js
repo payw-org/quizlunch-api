@@ -2,39 +2,33 @@ const DBConnector = require('../db/DBConnector');
 
 
   exports.create = async (req, res) => {
-    
-    var nowTime = new Date().toLocaleString("en-US", {timeZone: "Asia/Seoul"});
-    nowTime = new Date(nowTime);
-    var date = nowTime.getFullYear()+'-'+(nowTime.getMonth()+1)+'-'+nowTime.getDate();
-    var time = nowTime.getHours() + ":" + nowTime.getMinutes() + ":" + nowTime.getSeconds();
-    var ip = req.headers['x-forwarded-for'] ||
-     req.connection.remoteAddress ||
-     req.socket.remoteAddress ||
-     req.connection.socket.remoteAddress;
-    var dateTime = date + ' ' + time;
+    var dateNow = new Date()
+    var YYYY = dateNow.getFullYear()
+    var MM = ('0'+(dateNow.getMonth()+1)).slice(-2)
+    var DD = ('0'+(dateNow.getDate())).slice(-2)
+    var hh = ('0'+(dateNow.getHours())).slice(-2)
+    var mm = ('0'+(dateNow.getMinutes())).slice(-2)
+    var ss = ('0'+(dateNow.getSeconds())).slice(-2)
+    var YYYYMMDDhhmmss = `${YYYY}-${MM}-${DD} ${hh}:${mm}:${ss}`
 
-    const defaultMoney=1000;
-    const quiz = await DBConnector.getQuiz(req.body.quizID)
-    var quizTime = new Date(quiz.time)
-    var timeMoney=0
-    if(nowTime.getDate()!=quizTime.getDate())
-    {
-      timeMoney=60*24
-    }
-    timeMoney=timeMoney+((nowTime.getHours() * 60  + nowTime.getMinutes() * 1 ) - (quizTime.getHours() * 60  + quizTime.getMinutes()*1))*2
-    if(timeMoney<0)
-    {
-      timeMoney=0
-    }
-    var nowMoney=defaultMoney+timeMoney
+    var ip = req.headers['x-forwarded-for'] || req.connection.remoteAddress || req.socket.remoteAddress || req.connection.socket.remoteAddress;
+
+    
+    var quizStartAt = dateNow
+    if(quizStartAt.getHours() < 12)
+      quizStartAt.setDay(quizStartAt.getDate()-1)
+    quizStartAt.setHours(12)
+    quizStartAt.setMinutes(0)
+    quizStartAt.setSeconds(0)
+    var money = Math.floor((Date.now()-quizStartAt)/1000/20)
 
     var winner = {
                 'quizID':req.body.quizID,
-                'money':nowMoney,
+                'money':money,
                 'nickname':req.body.nickname,
                 'text':req.body.text,
                 'ip':ip,
-                'time':dateTime 
+                'time':YYYYMMDDhhmmss
             };
 
     await DBConnector.insertWinner(winner)
