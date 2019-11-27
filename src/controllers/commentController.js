@@ -23,8 +23,6 @@ exports.create = async (req, res) => {
 
     // time
     var today = new Date()
-    if(today.getHours() < 12)
-      today.setDate(today.getDate()+1)
     var YYYY = today.getFullYear()
     var MM = ('0'+(today.getMonth()+1)).slice(-2)
     var DD = ('0'+(today.getDate())).slice(-2)
