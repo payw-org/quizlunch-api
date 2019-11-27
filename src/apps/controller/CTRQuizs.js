@@ -54,9 +54,9 @@ exports.checkAnswer = async (req, res) => {
     await DBQuizs.updateGotAnswerByID(req.params.quizID)
     const quiz = await DBQuizs.getQuizByID(req.params.quizID)
     WSConnector.broadcast('renew quiz', quiz)
-    res.send("correct")
+    res.send('200')
   }
   else{
-    res.send("wrong")
+    res.send('504')
   }
 }
