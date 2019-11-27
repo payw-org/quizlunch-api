@@ -179,7 +179,7 @@ class DBConnector {
     if(!this.connection)
       await this.connect()
 
-    var quizStartAt = dateNow
+    var quizStartAt = new Date()
     if(quizStartAt.getHours() < 12)
       quizStartAt.setDay(quizStartAt.getDate()-1)
     quizStartAt.setHours(12)
