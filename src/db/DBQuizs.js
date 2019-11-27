@@ -3,9 +3,11 @@ const DB = require('./index')
 module.exports = class DBQuizs{
 
     static async getQuizByID(quizID){
-        var query = `SELECT information, money, picture, quizID, time, title FROM quizs where quizID = ? `
+        var query = `SELECT information, money, picture, quizID, time, title, answer FROM quizs where quizID = ? `
         var values = [quizID]
-        var [result] = await DB.query(query, values)
+        var result = await DB.query(query, values)
+
+        result[0].answer = ''
         if(result[0].money === 0){ // Not solved quiz
             var quizStartAt = new Date()
             if(quizStartAt.getHours() < 12)
@@ -15,24 +17,24 @@ module.exports = class DBQuizs{
             quizStartAt.setSeconds(0)
             result[0].money = Math.floor((Date.now()-quizStartAt)/1000/20)
         }
-        return result
+        return result[0]
     }
 
     static async getPreviousIDByID(commentID){
         var query = `SELECT quizID FROM quizs WHERE quizID < ? ORDER BY quizID DESC`
         var values = [commentID]
-        var [result] = await DB.query(query, values)
-        return result
+        var result = await DB.query(query, values)
+        return result[0].quizID
     }
 
     static async getNextIDByID(commentID){
         var query = `SELECT quizID FROM quizs WHERE quizID > ? ORDER BY quizID DESC`
         var values = [commentID]
-        var [result] = await DB.query(query, values)
-        return result
+        var result = await DB.query(query, values)
+        return result[0].quizID
     }
 
-    static async getIDByTime(time=null){
+    static async getIDByTime(time = null){
         var query = `SELECT quizID from quizs WHERE time <= ?  ORDER BY quizID ASC`
         var values = [time]
 
@@ -46,22 +48,21 @@ module.exports = class DBQuizs{
             var YYYYMMDD = `${YYYY}-${MM}-${DD}`
             values = [YYYYMMDD]
         }
-        var [result] = await DB.query(query, values)
-        return result
+        var result = await DB.query(query, values)
+        return result[0].quizID
     }
 
     static async getAnswerByID(quizID){
         var query = `SELECT answer FROM quizs WHERE quizID = ? `
         var values = [quizID]
-        var [result] = await DB.query(query, values)
-        return result
+        var result = await DB.query(query, values)
+        return result[0].answer
     }
 
     static async insertQuiz(quiz){
         var query = `insert into quizs(title, picture, information, answer, time, gotAnswer) VALUES (?, ?, ?, ?, ?, ?)`
         var values = [quiz.title, quiz.picture, quiz.information, quiz.answer, quiz.time, quiz.gotAnswer]
-        var [result] = await DB.query(query, values)
-        return result
+        await DB.query(query, values)
     }
 
     static async updateGotAnswerByID(quizID){
