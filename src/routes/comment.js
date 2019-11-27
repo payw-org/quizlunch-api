@@ -1,13 +1,10 @@
-
 const express = require('express');
 const router = express.Router();
 
+const CTRComments = require('../apps/controller/CTRComments');
 
-const commentController = require('../controllers/commentController');
-// router.get('/:quizID', commentController.getOneQuizComments);
-
-router.post('/', commentController.create);
-router.delete('/', commentController.delete);
-router.get('/more', commentController.more);
+router.post('/', CTRComments.create);
+router.delete('/', CTRComments.delete);
+router.get('/more', CTRComments.more);
 
 module.exports = router

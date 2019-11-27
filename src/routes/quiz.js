@@ -1,18 +1,11 @@
-
 const express = require('express');
 const router = express.Router();
 
+const CTRQuizs = require('../apps/controller/CTRQuizs');
 
-const quizController = require('../controllers/quizController');
-
-router.get('/:quizID/left', quizController.getLeftPage);
-
-router.get('/:quizID/right', quizController.getRightPage);
-
-router.get('/:quizID/:answer', quizController.checkAnswer);
-
-router.post('/', quizController.createQuiz);
-
-// router.put('/', quizController.updateAnswer);
+router.get('/:quizID/left', CTRQuizs.getPreviousPage);
+router.get('/:quizID/right', CTRQuizs.getNextPage);
+router.get('/:quizID/:answer', CTRQuizs.checkAnswer);
+router.post('/', CTRQuizs.createQuiz);
 
 module.exports = router
