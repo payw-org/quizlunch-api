@@ -43,15 +43,14 @@ exports.update = async (req, res) => {
   var ip = req.headers['x-forwarded-for'] || req.connection.remoteAddress || req.socket.remoteAddress || req.connection.socket.remoteAddress;
   var quizID = await DBQuizs.getIDByTime()
   var winner = await DBWinners.getWinnerByQuizID(quizID)
-
-  if(winner.ip === solvedIP && winner.account === ''){
+  if(winner !== null && winner.ip === ip && winner.account === ''){
     winner['fullName'] = req.body.fullName
     winner['bank'] = req.body.bank
     winner['account'] = req.body.account
     await DBWinners.updateWinner(winner)
-    res.sendStatus(200) 
+    res.send('200')
   }
   else{
-    res.sendStatus(504)
+    res.send('504')
   }
 }

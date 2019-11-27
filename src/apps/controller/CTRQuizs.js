@@ -2,6 +2,7 @@ const WSConnector = require('../../websocket/WSConnector');
 const DBQuizs = require('../../db/DBQuizs');
 const DBComments = require('../../db/DBComments');
 const DBNicknames = require('../../db/DBNicknames')
+const DBWinners = require('../../db/DBWinners')
 
 exports.getPreviousPage = async (req, res) => {
   const quizID = await DBQuizs.getPreviousIDByID(req.params.quizID)

@@ -6,17 +6,19 @@ module.exports = class DBWinners{
         var query = `SELECT * FROM winners WHERE quizID = ?`
         var values = [quizID]
         var result = await DB.query(query, values)
+        if(result.length === 0)
+            return null
         return result[0]
     }
 
     static async updateWinner(winner){
-        var query = `UPDATE winners SET fullname = ?, bank = ?, account = ? WHERE quizID = ?`
+        var query = `UPDATE winners SET fullName = ?, bank = ?, account = ? WHERE quizID = ?`
         var values = [winner.fullName, winner.bank, winner.account, winner.quizID]
         await DB.query(query, values)
     }
 
     static async insertWinner(winner){
-        var query = `INSERT INTO winners(quizID, nickname, ip, time, account, money) VALUES (?, ?, ?, ?, ?, ?, ?) `
+        var query = `INSERT INTO winners(quizID, nickname, ip, time, account, money) VALUES (?, ?, ?, ?, ?, ?) `
         
         // calc date
         var dateNow = new Date()
