@@ -1,5 +1,6 @@
 var WebSocketServer = require('ws')
-const DBConnector = require('../db/DBConnector');
+const DBQuizs = require('../db/DBQuizs');
+const DBComments = require('../db/DBComments');
 
 module.exports = class WSConnector {
 
@@ -11,22 +12,11 @@ module.exports = class WSConnector {
     static async defaultData(){
         this.WSS.on("connection", async (ws,req)=>{
             var data = {}
-            const todayQuizID = this.currentQuizID = await DBConnector.getTodayQuizID()
-            data['renew comments'] = await DBConnector.getComments(todayQuizID)
-            data['renew quiz'] = await DBConnector.getQuiz(todayQuizID)
-            data['renew money'] = await DBConnector.getMoney(todayQuizID)
-
+            var todayQuizID = await DBQuizs.getIDByTime()
+            data['renew quiz'] = await DBQuizs.getQuizByID(todayQuizID)
+            data['renew comments'] = await DBComments.getCommentsByQuizID(todayQuizID)
             ws.send(JSON.stringify(data))
-            const infiniteSend = setInterval(async ()=>{
-                data = {}
-                data['renew money'] = await DBConnector.getMoney(this.currentQuizID)
-                ws.send(JSON.stringify(data))
-            },1000)
         })
-    }
-
-    static setCurrentQuizID(quizID){
-        this.currentQuizID = quizID
     }
 
     static async broadcast(key, value){

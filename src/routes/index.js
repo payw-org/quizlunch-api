@@ -1,12 +1,12 @@
 const express = require('express');
 const router = express.Router();
 
-const quizRouter = require('./quiz')
-const winnerRouter = require('./winner')
-const commentRouter = require('./comment')
+const RTQuiz = require('./quiz')
+const RTWinner = require('./winner')
+const RTComment = require('./comment')
 
-router.use('/quiz',quizRouter)
-router.use('/winner',winnerRouter)
-router.use('/comment',commentRouter)
+router.use('/quiz',RTQuiz)
+router.use('/winner',RTWinner)
+router.use('/comment',RTComment)
 
 module.exports = router
