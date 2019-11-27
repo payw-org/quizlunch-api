@@ -39,7 +39,6 @@ exports.create = async (req, res) => {
 
 
 exports.update = async (req, res) => {
-  // ip
   var ip = req.headers['x-forwarded-for'] || req.connection.remoteAddress || req.socket.remoteAddress || req.connection.socket.remoteAddress;
   var quizID = await DBQuizs.getIDByTime()
   var winner = await DBWinners.getWinnerByQuizID(quizID)

@@ -10,7 +10,7 @@ exports.getPreviousPage = async (req, res) => {
   const comments = await DBComments.getCommentsByQuizID(quizID)
   WSConnector.broadcast('renew quiz', quiz)
   WSConnector.broadcast('renew comments', comments)
-  res.send(200)
+  res.send('200')
 }
 
 exports.getNextPage = async (req, res) => {
@@ -19,7 +19,7 @@ exports.getNextPage = async (req, res) => {
   const comments = await DBComments.getCommentsByQuizID(quizID)
   WSConnector.broadcast('renew quiz', quiz)
   WSConnector.broadcast('renew comments', comments)
-  res.send(200)
+  res.send('200')
 }
 
 exports.createQuiz = async (req, res) => {
@@ -41,7 +41,7 @@ exports.createQuiz = async (req, res) => {
   }
 
   await DBQuizs.insertQuiz(quiz)
-  res.send(200)
+  res.send('200')
 }
 
 exports.checkAnswer = async (req, res) => {
