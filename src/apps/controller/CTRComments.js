@@ -20,6 +20,11 @@ exports.create = async (req, res) => {
     await DBNicknames.insertNickname({ip:ip, name:nickname})
   }
 
+  // admin
+  if(req.body.password == 'welovequizlunch1')
+    nickname = 'Quizlunch Manager'
+  if(req.body.password == 'welovequizlunch2')
+    nickname = 'Quizlunch Developer'
   // time
   var today = new Date()
   var YYYY = today.getFullYear()
@@ -38,6 +43,7 @@ exports.create = async (req, res) => {
   await DBComments.insertComment(comment)
   comment.commentID = await DBComments.getIDByComment(comment)
   delete comment.password;
+  comment.ip = comment.ip.substring(0,7) + '.***.***'
   WSConnector.broadcast('insert comment', comment)
   res.sendStatus(200)
 }
