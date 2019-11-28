@@ -3,6 +3,7 @@ const DBQuizs = require('../../db/DBQuizs')
 const DBComments = require('../../db/DBComments')
 const DBNicknames = require('../../db/DBNicknames')
 const WSConnector = require('../../websocket/WSConnector')
+const axiot = require('axios')
 
 const atNoon = '0 0 12 * * *'
 const continuously = '* * * * * *'
@@ -34,7 +35,7 @@ module.exports = class MYScheduler {
         // calc money
         var quizStartAt = new Date()
         if(quizStartAt.getHours() < 12)
-            quizStartAt.setDay(quizStartAt.getDate()-1)
+            quizStartAt.setDate(quizStartAt.getDate()-1)
         quizStartAt.setHours(12)
         quizStartAt.setMinutes(0)
         quizStartAt.setSeconds(0)
