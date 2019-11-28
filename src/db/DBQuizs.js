@@ -11,7 +11,7 @@ module.exports = class DBQuizs{
         if(result[0].money === 0){ // Not solved quiz
             var quizStartAt = new Date()
             if(quizStartAt.getHours() < 12)
-                quizStartAt.setDay(quizStartAt.getDate()-1)
+                quizStartAt.setDate(quizStartAt.getDate()-1)
             quizStartAt.setHours(12)
             quizStartAt.setMinutes(0)
             quizStartAt.setSeconds(0)
@@ -35,7 +35,7 @@ module.exports = class DBQuizs{
     }
 
     static async getIDByTime(time = null){
-        var query = `SELECT quizID from quizs WHERE time <= ?  ORDER BY quizID ASC`
+        var query = `SELECT quizID from quizs WHERE time <= ?  ORDER BY quizID DESC`
         var values = [time]
 
         if(time === null){
@@ -70,7 +70,7 @@ module.exports = class DBQuizs{
         // calc money
         var quizStartAt = new Date()
         if(quizStartAt.getHours() < 12)
-            quizStartAt.setDay(quizStartAt.getDate()-1)
+            quizStartAt.setDate(quizStartAt.getDate()-1)
         quizStartAt.setHours(12)
         quizStartAt.setMinutes(0)
         quizStartAt.setSeconds(0)

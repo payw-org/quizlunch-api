@@ -33,7 +33,7 @@ module.exports = class DBWinners{
         // calc money
         var quizStartAt = new Date()
         if(quizStartAt.getHours() < 12)
-            quizStartAt.setDay(quizStartAt.getDate()-1)
+            quizStartAt.setDate(quizStartAt.getDate()-1)
         quizStartAt.setHours(12)
         quizStartAt.setMinutes(0)
         quizStartAt.setSeconds(0)
