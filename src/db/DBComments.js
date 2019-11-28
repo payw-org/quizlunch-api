@@ -3,7 +3,7 @@ const DB = require('./index')
 module.exports = class DBComments{
     static async getCommentsByQuizID(quizID, startIndex=0 ,numOfComments=20){
         var query = `SELECT commentID, quizID, nickname, text, ip, time FROM comments where quizID = ? ORDER BY commentID DESC LIMIT ?, ?`
-        var values = [quizID, startIndex, numOfComments]
+        var values = [parseInt(quizID), parseInt(startIndex), parseInt(numOfComments)]
         var result = await DB.query(query, values)
         for(var i = 0; i<result.length; i++)
             result[i].ip = result[i].ip.substring(0,7) + '.***.***'
