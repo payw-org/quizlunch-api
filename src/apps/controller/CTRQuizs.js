@@ -8,18 +8,20 @@ exports.getPreviousPage = async (req, res) => {
   const quizID = await DBQuizs.getPreviousIDByID(req.params.quizID)
   const quiz = await DBQuizs.getQuizByID(quizID)
   const comments = await DBComments.getCommentsByQuizID(quizID)
-  WSConnector.broadcast('renew quiz', quiz)
-  WSConnector.broadcast('renew comments', comments)
-  res.send('200')
+  var data = {}
+  data['quiz'] = quiz
+  data['comments'] = comments
+  res.send(data)
 }
 
 exports.getNextPage = async (req, res) => {
   const quizID = await DBQuizs.getNextIDByID(req.params.quizID)
   const quiz = await DBQuizs.getQuizByID(quizID)
   const comments = await DBComments.getCommentsByQuizID(quizID)
-  WSConnector.broadcast('renew quiz', quiz)
-  WSConnector.broadcast('renew comments', comments)
-  res.send('200')
+  var data = {}
+  data['quiz'] = quiz
+  data['comments'] = comments
+  res.send(data)
 }
 
 exports.createQuiz = async (req, res) => {
