@@ -20,16 +20,16 @@ module.exports = class DBQuizs{
         return result[0]
     }
 
-    static async getPreviousIDByID(quizID){
+    static async getPreviousIDByID(commentID){
         var query = `SELECT quizID FROM quizs WHERE quizID < ? ORDER BY quizID DESC`
-        var values = [quizID]
+        var values = [commentID]
         var result = await DB.query(query, values)
         return result[0].quizID
     }
 
-    static async getNextIDByID(quizID){
+    static async getNextIDByID(commentID){
         var query = `SELECT quizID FROM quizs WHERE quizID > ? ORDER BY quizID DESC`
-        var values = [quizID]
+        var values = [commentID]
         var result = await DB.query(query, values)
         return result[0].quizID
     }
