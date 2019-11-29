@@ -25,8 +25,8 @@ exports.getNextPage = async (req, res) => {
 }
 
 exports.createQuiz = async (req, res) => {
-  console.log(req.body.masterKey)
-  console.log(config.password)
+  console.log(req.body.masterKey+'a')
+  console.log(config.password+'a')
   if(req.body.masteKey==config.password){
     console.log("work")
     var today = new Date()
