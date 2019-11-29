@@ -13,6 +13,13 @@ exports.getPreviousPage = async (req, res) => {
   var data = {}
   data['quiz'] = quiz
   data['comments'] = comments
+  data['isFirst'] = false
+  data['isLast'] = false
+  
+  quizID = await DBQuizs.getPreviousIDByID(quizID)
+  if(quizID === null){
+    data['isFirst'] = true
+  }
   res.send(data)
 }
 
@@ -23,6 +30,13 @@ exports.getNextPage = async (req, res) => {
   var data = {}
   data['quiz'] = quiz
   data['comments'] = comments
+  data['isFirst'] = false
+  data['isLast'] = false
+  
+  quizID = await DBQuizs.getNextIDByID(quizID)
+  if(quizID === null){
+    data['isLast'] = true
+  }
   res.send(data)
 }
 

@@ -6,6 +6,10 @@ module.exports = class DBQuizs{
         var query = `SELECT information, money, picture, quizID, time, title, answer, gotAnswer FROM quizs where quizID = ? `
         var values = [quizID]
         var result = await DB.query(query, values)
+        if(result.length === 0){
+            console.log(`Error - ${quizID} quiz is not exist.`)
+            return null
+        }
         if(result[0].gotAnswer === 0)
             result[0].answer = ''
         if(result[0].money === 0){ // Not solved quiz
@@ -24,6 +28,9 @@ module.exports = class DBQuizs{
         var query = `SELECT quizID FROM quizs WHERE quizID < ? ORDER BY quizID DESC`
         var values = [quizID]
         var result = await DB.query(query, values)
+        if(result.length === 0){
+            return null
+        }
         return result[0].quizID
     }
 
@@ -31,6 +38,9 @@ module.exports = class DBQuizs{
         var query = `SELECT quizID FROM quizs WHERE quizID > ? ORDER BY quizID DESC`
         var values = [quizID]
         var result = await DB.query(query, values)
+        if(result.length === 0){
+            return null
+        }
         return result[0].quizID
     }
 
