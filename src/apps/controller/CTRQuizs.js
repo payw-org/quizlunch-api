@@ -28,7 +28,7 @@ exports.createQuiz = async (req, res) => {
   console.log(req.body.masterKey)
   console.log(config.password)
   if(req.body.masteKey==config.password){
-
+    console.log("work")
     var today = new Date()
     if(today.getHours() < 12)
         today.setDate(today.getDate()-1)
