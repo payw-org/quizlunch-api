@@ -6,7 +6,7 @@ const WSConnector = require('../../websocket/WSConnector')
 const axiot = require('axios')
 
 const atNoon = '0 0 12 * * *'
-const continuously = '* * * * * *'
+const everyMinute = '0 * * * * *'
 
 module.exports = class MYScheduler {
 
@@ -40,7 +40,7 @@ module.exports = class MYScheduler {
         quizStartAt.setMinutes(0)
         quizStartAt.setSeconds(0)
         
-        money['value'] = Math.floor((Date.now()-quizStartAt)/1000/20)
+        money['value'] = parseFloat(((Date.now()-quizStartAt)/1000/20).toFixed(4))
         money['quizID'] = quizID
         await WSConnector.broadcast('renew money', money)
     }
@@ -49,6 +49,6 @@ module.exports = class MYScheduler {
         this.schedules = {}
         this.schedules.changeNicknameAtNoon = scheduler.scheduleJob(atNoon,this.changeNicknames)
         this.schedules.broadcastQuizAtNoon = scheduler.scheduleJob(atNoon,this.renewQuiz)
-        this.schedules.broadcastMoneyContinuously = scheduler.scheduleJob(continuously,this.renewMoney)
+        this.schedules.broadcastMoneyContinuously = scheduler.scheduleJob(everyMinute,this.renewMoney)
     }
 }

@@ -15,7 +15,7 @@ module.exports = class DBQuizs{
             quizStartAt.setHours(12)
             quizStartAt.setMinutes(0)
             quizStartAt.setSeconds(0)
-            result[0].money = Math.floor((Date.now()-quizStartAt)/1000/20)
+            result[0].money = parseFloat(((Date.now()-quizStartAt)/1000/20).toFixed(4))
         }
         return result[0]
     }
