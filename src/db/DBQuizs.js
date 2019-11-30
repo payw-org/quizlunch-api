@@ -35,7 +35,7 @@ module.exports = class DBQuizs{
     }
 
     static async getNextIDByID(quizID){
-        var query = `SELECT quizID FROM quizs WHERE quizID > ? ORDER BY quizID DESC`
+        var query = `SELECT quizID FROM quizs WHERE quizID > ? ORDER BY quizID ASC`
         var values = [quizID]
         var result = await DB.query(query, values)
         if(result.length === 0){
@@ -84,6 +84,16 @@ module.exports = class DBQuizs{
         quizStartAt.setHours(12)
         quizStartAt.setMinutes(0)
         quizStartAt.setSeconds(0)
+        var money = Math.floor((Date.now()-quizStartAt)/1000/20)
+        var values = [money, quizID]
+        await DB.query(query, values)
+    }
+
+    static async updateNotSolvedByID(quizID){
+        var query = `UPDATE quizs SET gotAnswer ='1', money = ? WHERE quizID = ?`
+        // calc money
+        var quizStartAt = new Date()
+        quizStartAt.setDate(quizStartAt.getDate()-1)
         var money = Math.floor((Date.now()-quizStartAt)/1000/20)
         var values = [money, quizID]
         await DB.query(query, values)
