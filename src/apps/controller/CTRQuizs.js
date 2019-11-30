@@ -7,7 +7,7 @@ const config = require('../../configs/environments');
 
 
 exports.getPreviousPage = async (req, res) => {
-  const quizID = await DBQuizs.getPreviousIDByID(req.params.quizID)
+  var quizID = await DBQuizs.getPreviousIDByID(req.params.quizID)
   const quiz = await DBQuizs.getQuizByID(quizID)
   const comments = await DBComments.getCommentsByQuizID(quizID)
   var data = {}
@@ -24,7 +24,8 @@ exports.getPreviousPage = async (req, res) => {
 }
 
 exports.getNextPage = async (req, res) => {
-  const quizID = await DBQuizs.getNextIDByID(req.params.quizID)
+  var quizID = await DBQuizs.getNextIDByID(req.params.quizID)
+  var quizIDToday = await DBQuizs.getIDByTime()
   const quiz = await DBQuizs.getQuizByID(quizID)
   const comments = await DBComments.getCommentsByQuizID(quizID)
   var data = {}
@@ -33,6 +34,9 @@ exports.getNextPage = async (req, res) => {
   data['isFirst'] = false
   data['isLast'] = false
   
+  if(quizID === quizIDToday){
+    data['isLast'] = true
+  }
   quizID = await DBQuizs.getNextIDByID(quizID)
   if(quizID === null){
     data['isLast'] = true
