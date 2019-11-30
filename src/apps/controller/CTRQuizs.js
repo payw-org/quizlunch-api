@@ -46,16 +46,16 @@ exports.getNextPage = async (req, res) => {
 
 exports.createQuiz = async (req, res) => {
   if(req.body.masterKey==config.password){
-    var today = new Date()
-    if(today.getHours() < 12)
-        today.setDate(today.getDate()-1)
+    const timeLast = await DBQuizs.getTimeLast()
+    var today = new Date(timeLast)
+    today.setDate(today.getDate()+1)
     var YYYY = today.getFullYear()
     var MM = ('0'+(today.getMonth()+1)).slice(-2)
     var DD = ('0'+(today.getDate())).slice(-2)
     var YYYYMMDD = `${YYYY}-${MM}-${DD}`
 
     var quiz = {
-      'title':req.body.title,
+      'author':req.body.author,
       'picture':req.body.picture,
       'information':req.body.information,
       'answer':req.body.answer,

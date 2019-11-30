@@ -3,13 +3,15 @@ const DB = require('./index')
 module.exports = class DBQuizs{
 
     static async getQuizByID(quizID){
-        var query = `SELECT information, money, picture, quizID, time, title, answer, gotAnswer FROM quizs where quizID = ? `
+        var query = `SELECT information, money, picture, quizID, time, author, answer, gotAnswer FROM quizs where quizID = ? `
         var values = [quizID]
         var result = await DB.query(query, values)
         if(result.length === 0){
             console.log(`Error - ${quizID} quiz is not exist.`)
             return null
         }
+        if(result[0].author === '')
+            result[0].author = 'Quizlunch'
         if(result[0].gotAnswer === 0)
             result[0].answer = ''
         if(result[0].money === 0){ // Not solved quiz
@@ -62,6 +64,12 @@ module.exports = class DBQuizs{
         return result[0].quizID
     }
 
+    static async getTimeLast(){
+        var query = `SELECT time FROM quizs ORDER BY quizID DESC LIMIT 0, 1`
+        var result = await DB.query(query)
+        return result[0].time
+    }
+
     static async getAnswerByID(quizID){
         var query = `SELECT answer FROM quizs WHERE quizID = ? `
         var values = [quizID]
@@ -70,8 +78,8 @@ module.exports = class DBQuizs{
     }
 
     static async insertQuiz(quiz){
-        var query = `insert into quizs(title, picture, information, answer, time, gotAnswer) VALUES (?, ?, ?, ?, ?, ?)`
-        var values = [quiz.title, quiz.picture, quiz.information, quiz.answer, quiz.time, quiz.gotAnswer]
+        var query = `insert into quizs(author, picture, information, answer, time, gotAnswer) VALUES (?, ?, ?, ?, ?, ?)`
+        var values = [quiz.author, quiz.picture, quiz.information, quiz.answer, quiz.time, quiz.gotAnswer]
         await DB.query(query, values)
     }
 

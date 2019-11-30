@@ -34,10 +34,9 @@ exports.create = async (req, res) => {
     nickname = 'Quizlunch Developer'
   // time
   var today = new Date()
-  var YYYY = today.getFullYear()
-  var MM = ('0'+(today.getMonth()+1)).slice(-2)
-  var DD = ('0'+(today.getDate())).slice(-2)
-  var YYYYMMDD = `${YYYY}-${MM}-${DD}`
+  var hh = ('0'+(today.getHours())).slice(-2)
+  var mm = ('0'+(today.getMinutes())).slice(-2)
+  var hhmm = `${hh}:${mm}`
 
   var comment = {
     'quizID':req.body.quizID,
@@ -45,7 +44,7 @@ exports.create = async (req, res) => {
     'password':req.body.password,
     'text':req.body.text,
     'ip':ip,
-    'time':YYYYMMDD 
+    'time':hhmm 
   }
   await DBComments.insertComment(comment)
   comment.commentID = await DBComments.getIDByComment(comment)
