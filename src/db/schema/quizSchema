@@ -3,7 +3,7 @@
 create table quizs(
     quizID int not null AUTO_INCREMENT PRIMARY KEY,
     money int,
-    title char(20),
+    author char(20),
     picture char(20),
     information char(80),
     answer char(20),
