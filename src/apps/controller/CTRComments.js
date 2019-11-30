@@ -1,10 +1,17 @@
-const DBComments = require('../../db/DBComments');
+const DBQuiz = require('../../db/DBQuizs')
+const DBComments = require('../../db/DBComments')
 const DBNicknames = require('../../db/DBNicknames')
-const WSConnector = require('../../websocket/WSConnector');
+const WSConnector = require('../../websocket/WSConnector')
 
 exports.create = async (req, res) => {
   const axios = require('axios');
+  const quizID = await DBQuiz.getIDByTime()
   var result
+
+  if(req.body.quizID !== quizID){
+    res.send('504')
+    return
+  }
 
   // ip
   var ip = req.headers['x-forwarded-for'] ||
