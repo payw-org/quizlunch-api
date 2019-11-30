@@ -6,6 +6,10 @@ module.exports = class DBQuizs{
         var query = `SELECT information, money, picture, quizID, time, title, answer, gotAnswer FROM quizs where quizID = ? `
         var values = [quizID]
         var result = await DB.query(query, values)
+        if(result.length === 0){
+            console.log(`Error - ${quizID} quiz is not exist.`)
+            return null
+        }
         if(result[0].gotAnswer === 0)
             result[0].answer = ''
         if(result[0].money === 0){ // Not solved quiz
@@ -24,13 +28,19 @@ module.exports = class DBQuizs{
         var query = `SELECT quizID FROM quizs WHERE quizID < ? ORDER BY quizID DESC`
         var values = [quizID]
         var result = await DB.query(query, values)
+        if(result.length === 0){
+            return null
+        }
         return result[0].quizID
     }
 
     static async getNextIDByID(quizID){
-        var query = `SELECT quizID FROM quizs WHERE quizID > ? ORDER BY quizID DESC`
+        var query = `SELECT quizID FROM quizs WHERE quizID > ? ORDER BY quizID ASC`
         var values = [quizID]
         var result = await DB.query(query, values)
+        if(result.length === 0){
+            return null
+        }
         return result[0].quizID
     }
 
@@ -74,6 +84,16 @@ module.exports = class DBQuizs{
         quizStartAt.setHours(12)
         quizStartAt.setMinutes(0)
         quizStartAt.setSeconds(0)
+        var money = Math.floor((Date.now()-quizStartAt)/1000/20)
+        var values = [money, quizID]
+        await DB.query(query, values)
+    }
+
+    static async updateNotSolvedByID(quizID){
+        var query = `UPDATE quizs SET gotAnswer ='1', money = ? WHERE quizID = ?`
+        // calc money
+        var quizStartAt = new Date()
+        quizStartAt.setDate(quizStartAt.getDate()-1)
         var money = Math.floor((Date.now()-quizStartAt)/1000/20)
         var values = [money, quizID]
         await DB.query(query, values)

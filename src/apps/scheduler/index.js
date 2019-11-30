@@ -26,6 +26,10 @@ module.exports = class MYScheduler {
         const comments = await DBComments.getCommentsByQuizID(quizID)
         await WSConnector.broadcast('renew quiz', quiz)
         await WSConnector.broadcast('renew comments', comments)
+
+        const quizIDPrevious = await DBQuizs.getPreviousIDByID(quizID)
+        if(quizIDPrevious !== quizID)
+            await DBQuizs.updateNotSolvedByID(quizIDPrevious)
     }
 
     static async renewMoney(){
