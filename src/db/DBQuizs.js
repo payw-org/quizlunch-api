@@ -78,8 +78,8 @@ module.exports = class DBQuizs{
     }
 
     static async insertQuiz(quiz){
-        var query = `insert into quizs(author, picture, information, answer, time, gotAnswer) VALUES (?, ?, ?, ?, ?, ?)`
-        var values = [quiz.author, quiz.picture, quiz.information, quiz.answer, quiz.time, quiz.gotAnswer]
+        var query = `insert into quizs(money ,author, picture, information, answer, time, gotAnswer) VALUES (?, ?, ?, ?, ?, ?, ?)`
+        var values = [quiz.money , quiz.author, quiz.picture, quiz.information, quiz.answer, quiz.time, quiz.gotAnswer]
         await DB.query(query, values)
     }
 

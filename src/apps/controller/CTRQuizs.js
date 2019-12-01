@@ -55,6 +55,7 @@ exports.createQuiz = async (req, res) => {
     var YYYYMMDD = `${YYYY}-${MM}-${DD}`
 
     var quiz = {
+      'money': 0,
       'author':req.body.author,
       'picture':req.body.picture,
       'information':req.body.information,
