@@ -48,7 +48,7 @@ exports.create = async (req, res) => {
   }
   await DBComments.insertComment(comment)
   comment.commentID = await DBComments.getIDByComment(comment)
-  delete comment.password;
+  comment.password = '';
   comment.ip = comment.ip.substring(0,7) + '.***.***'
   WSConnector.broadcast('insert comment', comment)
   res.sendStatus(200)
@@ -60,6 +60,7 @@ exports.more = async (req, res) => {
 }
 
 exports.delete = async (req, res) => {
+  console.log(req.body)
   const password = await DBComments.getPasswordByID(req.body.commentID)
   if(password === req.body.password){
     await DBComments.deleteCommentByID(req.body.commentID)
