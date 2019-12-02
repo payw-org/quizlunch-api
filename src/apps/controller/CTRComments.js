@@ -48,7 +48,7 @@ exports.create = async (req, res) => {
   }
   await DBComments.insertComment(comment)
   comment.commentID = await DBComments.getIDByComment(comment)
-  delete comment.password;
+  comment.password = '';
   comment.ip = comment.ip.substring(0,7) + '.***.***'
   WSConnector.broadcast('insert comment', comment)
   res.sendStatus(200)
