@@ -3,6 +3,7 @@ const DBQuizs = require('../../db/DBQuizs');
 const DBComments = require('../../db/DBComments');
 const DBNicknames = require('../../db/DBNicknames')
 const DBWinners = require('../../db/DBWinners')
+const DBAnswers = require('../../db/DBAnswers')
 const config = require('../../configs/environments');
 
 
@@ -75,10 +76,10 @@ exports.createQuiz = async (req, res) => {
 }
 
 exports.checkAnswer = async (req, res) => {
+  var ip = req.headers['x-forwarded-for'] || req.connection.remoteAddress || req.socket.remoteAddress || req.connection.socket.remoteAddress
   const answer = await DBQuizs.getAnswerByID(req.params.quizID)
   if(answer == req.params.answer){
     // quiz is solved
-    var ip = req.headers['x-forwarded-for'] || req.connection.remoteAddress || req.socket.remoteAddress || req.connection.socket.remoteAddress
     var nickname = await DBNicknames.getNicknameByIP(ip)
     await DBWinners.insertWinner({quizID:req.params.quizID, nickname:nickname, ip:ip})
     await DBQuizs.updateGotAnswerByID(req.params.quizID)
@@ -87,6 +88,8 @@ exports.checkAnswer = async (req, res) => {
     res.send('200')
   }
   else{
-    res.send('504')
+    var count = await DBAnswers.getCountByAnswer(req.params.quizID, req.params.answer)
+    await DBAnswers.insertAnswer(req.params.quizID, req.params.answer, ip)
+    res.send({state:'504', count: count})
   }
 }
