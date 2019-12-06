@@ -3,7 +3,7 @@ const DBQuizs = require('../../db/DBQuizs')
 const DBComments = require('../../db/DBComments')
 const DBNicknames = require('../../db/DBNicknames')
 const WSConnector = require('../../websocket/WSConnector')
-const axiot = require('axios')
+const axios = require('axios')
 
 const atNoon = '0 0 12 * * *'
 const everyMinute = '0 * * * * *'
@@ -12,10 +12,11 @@ module.exports = class MYScheduler {
 
     static async changeNicknames(){
         const ipList = await DBNicknames.getIPAll()
-        var nickname
+        var result, nickname
         for(var i=0; i<ipList.length; i++){
-            nickname = await axios.get('http://rng.api.quizlunch.com/new').data;
-            await DBNicknames.updateNickname({ip:ipList[i], name:nickname})
+            result = await axios.get('http://rng.api.quizlunch.com/new')
+            nickname = result.data
+            await DBNicknames.updateNickname({ip:ipList[i].ip, name:nickname})
         }
         console.log('>Nickname has been changed.')
     }

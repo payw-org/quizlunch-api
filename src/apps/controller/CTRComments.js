@@ -60,7 +60,6 @@ exports.more = async (req, res) => {
 }
 
 exports.delete = async (req, res) => {
-  console.log(req.body)
   const password = await DBComments.getPasswordByID(req.body.commentID)
   if(password === req.body.password){
     await DBComments.deleteCommentByID(req.body.commentID)
