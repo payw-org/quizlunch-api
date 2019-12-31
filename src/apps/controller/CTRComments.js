@@ -1,10 +1,17 @@
-const DBComments = require('../../db/DBComments');
+const DBQuiz = require('../../db/DBQuizs')
+const DBComments = require('../../db/DBComments')
 const DBNicknames = require('../../db/DBNicknames')
-const WSConnector = require('../../websocket/WSConnector');
+const WSConnector = require('../../websocket/WSConnector')
 
 exports.create = async (req, res) => {
   const axios = require('axios');
+  const quizID = await DBQuiz.getIDByTime()
   var result
+
+  if(req.body.quizID !== quizID){
+    res.send('504')
+    return
+  }
 
   // ip
   var ip = req.headers['x-forwarded-for'] ||
@@ -20,12 +27,16 @@ exports.create = async (req, res) => {
     await DBNicknames.insertNickname({ip:ip, name:nickname})
   }
 
+  // admin
+  if(req.body.password == 'welovequizlunch1')
+    nickname = 'Quizlunch Manager'
+  if(req.body.password == 'welovequizlunch2')
+    nickname = 'Quizlunch Developer'
   // time
   var today = new Date()
-  var YYYY = today.getFullYear()
-  var MM = ('0'+(today.getMonth()+1)).slice(-2)
-  var DD = ('0'+(today.getDate())).slice(-2)
-  var YYYYMMDD = `${YYYY}-${MM}-${DD}`
+  var hh = ('0'+(today.getHours())).slice(-2)
+  var mm = ('0'+(today.getMinutes())).slice(-2)
+  var hhmm = `${hh}:${mm}`
 
   var comment = {
     'quizID':req.body.quizID,
@@ -33,11 +44,12 @@ exports.create = async (req, res) => {
     'password':req.body.password,
     'text':req.body.text,
     'ip':ip,
-    'time':YYYYMMDD 
+    'time':hhmm 
   }
   await DBComments.insertComment(comment)
   comment.commentID = await DBComments.getIDByComment(comment)
-  delete comment.password;
+  comment.password = '';
+  comment.ip = comment.ip.substring(0,7) + '.***.***'
   WSConnector.broadcast('insert comment', comment)
   res.sendStatus(200)
 }

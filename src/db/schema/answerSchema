@@ -1,0 +1,10 @@
+CREATE TABLE `quizlunch_dev_db`.`answers` (
+  `answerID` INT(11) NOT NULL,
+  `quizID` INT(11) NOT NULL,
+  `answer` CHAR(20) NOT NULL,
+  `ip` CHAR(20) NOT NULL,
+  PRIMARY KEY (`answerID`),
+  UNIQUE INDEX `answerID_UNIQUE` (`answerID` ASC) VISIBLE)
+ENGINE = InnoDB
+DEFAULT CHARACTER SET = utf8mb4
+COLLATE = utf8mb4_0900_ai_ci;

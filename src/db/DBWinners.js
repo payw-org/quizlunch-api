@@ -18,7 +18,7 @@ module.exports = class DBWinners{
     }
 
     static async insertWinner(winner){
-        var query = `INSERT INTO winners(quizID, nickname, ip, time, account, money) VALUES (?, ?, ?, ?, ?, ?) `
+        var query = `INSERT INTO winners(quizID, nickname, ip, time, money) VALUES (?, ?, ?, ?, ?) `
         
         // calc date
         var dateNow = new Date()
@@ -33,13 +33,13 @@ module.exports = class DBWinners{
         // calc money
         var quizStartAt = new Date()
         if(quizStartAt.getHours() < 12)
-            quizStartAt.setDay(quizStartAt.getDate()-1)
+            quizStartAt.setDate(quizStartAt.getDate()-1)
         quizStartAt.setHours(12)
         quizStartAt.setMinutes(0)
         quizStartAt.setSeconds(0)
         var money = Math.floor((Date.now()-quizStartAt)/1000/20)
 
-        var values = [winner.quizID, winner.nickname, winner.ip, YYYYMMDDhhmmss, '', money]
+        var values = [winner.quizID, winner.nickname, winner.ip, YYYYMMDDhhmmss, money]
         await DB.query(query, values)
     }
 }
